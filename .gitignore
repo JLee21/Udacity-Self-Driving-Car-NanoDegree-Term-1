@@ -87,3 +87,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+./test2/file-to-exclude.txt
+.txt
