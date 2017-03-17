@@ -3,6 +3,11 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from keras.models import Sequential
+from keras.layers import Flatten, Dense, Lambda, Activation
+from keras.layers.convolutional import Convolution2D
+from keras.layers.pooling import MaxPooling2D
+from keras.layers.core import Dropout
 
 lines = []
 csv_path = "D:\SDC\p3-Behavioural-Cloning\data\data\driving_log.csv"
@@ -42,7 +47,6 @@ Plot
 plt.hist(augmented_measurements, 50)
 plt.show()
 
-
 '''
 Model
 '''
@@ -50,12 +54,6 @@ batch_size = 128
 
 X_train = np.array(augmented_images)
 y_train = np.array(augmented_measurements)
-
-from keras.models import Sequential
-from keras.layers import Flatten, Dense, Lambda, Activation
-from keras.layers.convolutional import Convolution2D
-from keras.layers.pooling import MaxPooling2D
-from keras.layers.core import Dropout
 
 # barebones model
 model = Sequential()
