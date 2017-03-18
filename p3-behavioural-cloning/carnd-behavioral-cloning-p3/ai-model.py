@@ -9,10 +9,19 @@ from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 from keras.layers.core import Dropout
 
-lines = []
-csv_path = "D:\SDC\p3-Behavioural-Cloning\data\data\driving_log.csv"
-image_path = "D:\SDC\p3-Behavioural-Cloning\data\data\IMG\\"
+# If using AWS server, set this to True to change the file data's path
+aws = False
 
+if aws:
+    csv_path = "Udacity-Self-Driving-Car-Nanodegree\p3-bahavioural-cloning\
+    carnd-behavioral-cloning-p3\data\data\driving_log.csv"
+    image_path = "Udacity-Self-Driving-Car-Nanodegree\p3-bahavioural-cloning\
+    carnd-behavioral-cloning-p3\data\data\IMG\\"
+else:
+    csv_path = "D:\SDC\p3-Behavioural-Cloning\data\data\driving_log.csv"
+    image_path = "D:\SDC\p3-Behavioural-Cloning\data\data\IMG\\"
+
+line = []
 with open(csv_path) as csvfile:
     reader = csv.reader(csvfile)
     next(reader, None)
