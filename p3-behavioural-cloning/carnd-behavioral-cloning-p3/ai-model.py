@@ -13,15 +13,13 @@ from keras.layers.core import Dropout
 aws = True
 
 if aws:
-    csv_path = "Udacity-Self-Driving-Car-Nanodegree\p3-bahavioural-cloning\
-    carnd-behavioral-cloning-p3\data\data\driving_log.csv"
-    image_path = "Udacity-Self-Driving-Car-Nanodegree\p3-bahavioural-cloning\
-    carnd-behavioral-cloning-p3\data\data\IMG\\"
+    csv_path = "/home/carnd/Udacity-Self-Driving-Car-NanoDegree/p3-behavioural-cloning/carnd-behavioral-cloning-p3/data/data/driving_log.csv"
+    image_path = "/home/carnd/Udacity-Self-Driving-Car-NanoDegree/p3-behavioural-cloning/carnd-behavioral-cloning-p3/data/data/IMG"
 else:
     csv_path = "D:\SDC\p3-Behavioural-Cloning\data\data\driving_log.csv"
     image_path = "D:\SDC\p3-Behavioural-Cloning\data\data\IMG\\"
 
-line = []
+lines = []
 with open(csv_path) as csvfile:
     reader = csv.reader(csvfile)
     next(reader, None)
