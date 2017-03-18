@@ -10,7 +10,7 @@ from keras.layers.pooling import MaxPooling2D
 from keras.layers.core import Dropout
 
 # If using AWS server, set this to True to change the file data's path
-aws = False
+aws = True
 
 if aws:
     csv_path = "Udacity-Self-Driving-Car-Nanodegree\p3-bahavioural-cloning\
