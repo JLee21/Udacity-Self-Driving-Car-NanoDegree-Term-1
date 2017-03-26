@@ -9,12 +9,17 @@ import socketio
 import eventlet
 import eventlet.wsgi
 from PIL import Image
-from flask import Flask
+from flask import Flask, render_template, Response
 from io import BytesIO
+import cv2
+from cv2 import cvtColor
 
 from keras.models import load_model
 import h5py
 from keras import __version__ as keras_version
+
+''' Stream Camera '''
+import camera
 
 sio = socketio.Server()
 app = Flask(__name__)
@@ -44,9 +49,22 @@ class SimplePIController:
 
 
 controller = SimplePIController(0.1, 0.002)
-set_speed = 12
+set_speed = 15
 controller.set_desired(set_speed)
 
+steer_controller = SimplePIController(0.6, 0.002)
+
+''' Image Process Defs '''
+rows, cols = 64, 64
+def resize(img):
+    return cv2.resize(img, (rows, cols), cv2.INTER_AREA)
+
+def convert_to_hsv(img):
+    return cv2.cvtColor(img, cv2.COLOR_RGB2HSV)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @sio.on('telemetry')
 def telemetry(sid, data):
@@ -62,14 +80,20 @@ def telemetry(sid, data):
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
 
-        transformed_image_array = image_array[..., 1, None]
+        # Process images so our model accepts them
+        image_array = convert_to_hsv(image_array)
+        image_array = resize(image_array)
+        transformed_image_array = image_array[..., 1, None]  # shape is like (320, 160, 1)
 
-        steering_angle = float(model.predict(transformed_image_array[None, ...], batch_size=1))
+        steering_angle = float(model.predict(transformed_image_array[None, ...], \
+            batch_size=1))
 
         throttle = controller.update(float(speed))
+        # steering_angle = steer_controller.update(float(steering_angle))
 
-        print(steering_angle, throttle)
+        print('steer_angle {:+2.2f}\tthrottle {:2.2f}'.format(steering_angle, throttle))
         send_control(steering_angle, throttle)
+        steer_0 = steering_angle
 
         # save frame
         if args.image_folder != '':
@@ -131,6 +155,8 @@ if __name__ == '__main__':
         print("RECORDING THIS RUN ...")
     else:
         print("NOT RECORDING THIS RUN ...")
+
+
 
     # wrap Flask application with engineio's middleware
     app = socketio.Middleware(sio, app)
