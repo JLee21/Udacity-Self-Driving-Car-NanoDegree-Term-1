@@ -32,7 +32,9 @@ I randomly chose a handful of images and their corrsponding sign label from the 
 
 Design and Test a Model Architrecture
 ---
-My model architecture of choice is the popular [LeNet-5](https://en.wikipedia.org/wiki/Convolutional_neural_network#LeNet-5) convolutional nueral network first created by Yann LeCunn et al. It's popular for working with 'small' images in that it's designed for handwritten digit classification like zipcodes or numbers on checks. The only preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implmenting gradient descent for the network.
+My model architecture of choice is the popular [LeNet-5](https://en.wikipedia.org/wiki/Convolutional_neural_network#LeNet-5) convolutional nueral network first created by Yann LeCunn et al. It's popular for working with 'small' images in that it's designed for handwritten digit classification like zipcodes or numbers on checks. This architecture appeared appropriate as traffic signs are composed of simple abstractions like sign shape, symbols, numbers, etc.
+
+The only preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implmenting gradient descent.
 ```python
 norm_image = cv2.normalize(img, norm_img, alpha=-1, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
 ```
@@ -57,6 +59,22 @@ Fully Connect | Take input of 100 activations and output 84
 Activation | RELU
 Drop Out | Kill off 50% of the nueron's activations
 Fully Connect | Take input of 84 activations and output 43
+
+### Training the model
+The problem to solve is a classification one. The model will output its predicted probablities for each of the 43 traffic signs. So, the calculated loss will be cross entropy. My optizer of choice was is [Adaptive Moment Estimation](https://www.quora.com/Can-you-explain-basic-intuition-behind-ADAM-a-method-for-stochastic-optimization) or ADAM. Why ADAM? We don't want to use just Gradient Descent -- that would take too long. So we'll implement an approximate, but faster type called Stochastic Gradient Descent (SGD). ADAM is a type of SGD that takes advantage of its previous computed gradients in order to be wiser for its next gradient calculation. 
+I configured my learning rate to be 0.001 -- a typical learning rate value.
+My batch-size is dependent on my local computer resources -- a size of 128 worked well.
+The number of epochs I settled with is 6. That's like watching season one of House of Cards six times. Each time you watch same season (collection of data) and you may get deeper enjoyment with each successive veiwing (a lower caculated loss / higher validation accuracy) but watch it too many times over you'll plateua on the derived enjoyment from the show (stuck at a constant validation accruacy or even overfit on the training data).
+
+In order to acheive acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given my hypothesis. For example, three epochs probably cuts out needed 
+
+### Testing Results
+I split up the corpus of German traffic sign images into training, validation, and testing sets. Here's how the model performed:
+Image Set | Overall Accuracy
+----------|----------
+Training | 98.89%
+Validation | 93.51%
+Test | 92.28%
 
 
 
