@@ -9,7 +9,7 @@ I also grabbed the bigger-picture part of the dataset, like how much I'm working
 ![data set summary](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/basic-data-set-summary.JPG)
 
 ### Data Set Visualization
-I randomly chose a handful of images and their corrsponding sign label from the test set. Some reasons for doing this is to observe traights about the data set so you can prepare for the best and the worst.
+I randomly chose a handful of images and their corresponding sign label from the test set. Some reasons for doing this is to observe traights about the data set so you can prepare for the best and the worst.
 * Simply get a good overview of what you have to work with
 * View the resolution, color, size, darkness, etc.
 * Spot any outliers or unmatched signs
@@ -75,24 +75,42 @@ The model scored an overall accuracy of 71.43% on these seven test images. Let's
 * The sign 'Beware of Ice/Snow' containes a relatively complex snowflake symbol. As you can see from an example sign, the network's top three prediction got the shape and outline of the sign, but the model failed to determine what exactly what the complicated black symbol was inside the shape.
 ![]()
 
-* The test sign 'No Passing' was taken at an ag
+* As noted previously, I included a taffic sign that the model did indeed train on, however, as is common with traffic signs, there is an additional, smaller rectangular sign directly below it. It appears the model mistook this small, white rectanglular shape to mean 'No Entry' rather than the correct 'Wild Animals Crossing'
 
-### Dependencies
-This lab requires:
+![]()
 
-* [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit)
+* I'd like to point out that the model is acute enough to detect large and small vehicle shapes within each sign. This is evident with the 'No Passing for Vehicles over 3.4 Metric Tons'. The model even follows on our own intuition with its next best guesses as 'End of No Passing by Vehicles over 3.5 Metric Tons' and 'No Passing'.
 
-The lab enviroment can be created with CarND Term1 Starter Kit. Click [here](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) for the details.
+![]()
 
-### Dataset and Repository
+* Even when the test image skews the sign 'No Passing', the model picks out the round shape, the white background, and the two car shapes. Interestingly enough, the model is slightly reluctant in its decision as it gives some possibility that the sign is 'End of No Passing'
 
-1. [Download the dataset](https://d17h27t6h515a5.cloudfront.net/topher/2016/November/581faac4_traffic-signs-data/traffic-signs-data.zip). This is a pickled dataset in which we've already resized the images to 32x32.
-2. Clone the project, which contains the Ipython notebook and the writeup template.
-```sh
-git clone https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project
-cd CarND-Traffic-Sign-Classifier-Project
-jupyter notebook Traffic_Sign_Classifier.ipynb
+![]()
+
+* The model appears to ignore defacings to traffic signs and treats extra markings as noise.
+
+![]()
+
+Here are the rest of the model's predictions. The layout goes like this:
+
+```pyython
+--------------------------------------------------------
+<test image 1> | <1st prediction> | <2nd preditionc> ...
+--------------------------------------------------------
+<test image 2> | <1st prediction> | <2nd preditionc> ...
+--------------------------------------------------------
+<test image 3> | <1st prediction> | <2nd preditionc> ...
+--------------------------------------------------------
+.
+.
+.
 ```
+
+Note the bottom two rows. Of these rows, the first sign, with the pedestrian and bicycle, was never in the training set. Yet, the model took traights of this sign -- blue, round, white markings -- and still predicted a confident score that it is a 'Mandatory Roundabout'.
+The last image is a picture of myself. Haven't you ever wondered what German traffic sign you are?
+
+![]()
+
 
 ### Requirements for Submission
 Follow the instructions in the `Traffic_Sign_Classifier.ipynb` notebook and write the project report using the writeup template as a guide, `writeup_template.md`. Submit the project code and writeup document.
