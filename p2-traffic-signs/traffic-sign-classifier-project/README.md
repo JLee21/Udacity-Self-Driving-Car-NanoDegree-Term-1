@@ -36,7 +36,7 @@ I randomly chose a handful of images and their corresponding sign label from the
 * Simply get a good overview of what you have to work with
 * View the resolution, color, size, darkness, etc.
 * Spot any outliers or unmatched signs
-* Note any features that you can take advantage of (color, shape, symbol complexity, etc.)
+* Notice any features that you can take advantage of (color, shape, symbol complexity, etc.)
 
 ![visualize randomly chosen images and their sign lables](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/visualize-data-set.JPG?raw=true)
 
