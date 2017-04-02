@@ -4,6 +4,7 @@
 Overview
 ---
 ![]()
+
 The goal is of this project is to construct a Convolutional Nueral Network to classify German Traffic signs.
 
 This ReadMe outlines the step of the project
@@ -17,13 +18,26 @@ Data Set Summary & Exploration
 I wanted to understand the data that I was working with -- the shape, the values, etc. I went ahead and established the shapes of the data and even graphed the bare bones of the values.
 I also grabbed the bigger-picture part of the dataset, like how much I'm working with.
 
-![data set summary](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/basic-data-set-summary.JPG)
+```python
+Number of training examples = 34799
+Number of validation examples = 4410
+Number of testing examples = 12630
+Image data shape = (32, 32, 3)
+Number of classes = 43
+```
 
 ### Data Set Visualization
-I randomly chose a handful of images and their corresponding sign label from the test set. Some reasons for doing this is to observe traights about the data set so you can prepare for the best and the worst.
+Here is a histogram of all of the images that the model will be trained on. Looking at this is important because having a skewed or disproportionate data set will most likely skew the model into biased predictions.
+
+![]()
+
+I randomly chose a handful of images and their corresponding sign label from the test set. Some reasons for doing this:
+
+
 * Simply get a good overview of what you have to work with
 * View the resolution, color, size, darkness, etc.
 * Spot any outliers or unmatched signs
+* Note any features that you can take advantage of (color, shape, symbol complexity, etc.)
 
 ![visualize randomly chosen images and their sign lables](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/visualize-data-set.JPG?raw=true)
 
@@ -37,7 +51,7 @@ norm_image = cv2.normalize(img, norm_img, alpha=-1, beta=1, norm_type=cv2.NORM_M
 ```
 I did not convert the images to grayscale and instead left the color in the images. As we'll see, the model appears to acknowledge the color of the image. 
 
-The model architecture allows for a 32x32 picture with three color channels as its input. The output is a Softmax probablitiy of what the model computes as its decision.
+The model architecture allows for a 32x32 picture with three color channels as its input. The model's output is a array of Softmax probabilities, one for each traffic sign.
 
 Layer | Description
 ------|------------
@@ -58,16 +72,17 @@ Drop Out | Kill off 50% of the nueron's activations
 Fully Connect | Take input of 84 activations and output 43
 
 ### Training the model
-The problem to solve is a classification one. The model will output its predicted probablities for each of the 43 traffic signs. So, the calculated loss will be cross entropy. My optizer of choice was is [Adaptive Moment Estimation](https://www.quora.com/Can-you-explain-basic-intuition-behind-ADAM-a-method-for-stochastic-optimization) or ADAM. Why ADAM? We don't want to use just Gradient Descent -- that would take too long. So we'll implement an approximate, but faster type called Stochastic Gradient Descent (SGD). ADAM is a type of SGD that takes advantage of its previous computed gradients in order to be wiser for its next gradient calculation. 
+The model is setup up to perform classification as it will output its predicted probablities for each of the 43 traffic signs. So, the calculated loss will be cross entropy. My optizer of choice is [Adaptive Moment Estimation](https://www.quora.com/Can-you-explain-basic-intuition-behind-ADAM-a-method-for-stochastic-optimization) or ADAM. Why ADAM? We don't want to use just Gradient Descent -- that would take too long. So we'll implement an approximate, but faster type called Stochastic Gradient Descent or SGD. ADAM is a type of SGD that takes advantage of its previous computed gradients in order to apply wiser subsequent gradient calculations.
+
 I configured my learning rate to be 0.001 -- a typical learning rate value.
 My batch-size is dependent on my local computer resources -- a size of 128 worked well.
-The number of epochs I settled with is 6. That's like watching season one of House of Cards six times. Each time you watch same season (collection of data) and you may get deeper enjoyment with each successive veiwing (a lower caculated loss / higher validation accuracy) but watch it too many times over you'll plateua on the derived enjoyment from the show (stuck at a constant validation accruacy or even overfit on the training data).
+The number of epochs I settled with is 6. That's like watching season one of House of Cards six times. Each time you watch same season (collection of data) and you may get deeper enjoyment with each successive veiwing (a lower caculated loss / higher validation accuracy / well-adjusted weights within the network) but watch it too many times over you'll plateua on the derived enjoyment from the show (stuck at a constant validation accuracy / overfitting on the training data / weights that are too atuned to the training data).
 
-In order to acheive acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given my hypothesis. For example, three epochs probably cuts out much needed additional training for the network.
+In order to acheive an acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given a particular hypothesis. For example, three epochs probably cuts out much needed additional training for the network -- increasing the dropout percentage too much might make the model not confident in its decision.
 
 Analyze Testing Results
 ---
-I split up the corpus of German traffic sign images into training, validation, and testing sets. Here's how the model performed:
+I split up the corpus of German traffic sign images into training, validation, and testing sets. Here's how the model performed after being trained:
 
 Image Set | Overall Accuracy
 ----------|----------
@@ -81,28 +96,29 @@ I grabbed 7 german traffic signs from Google's image search. By chossing signs w
 
 ![test images](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-images.JPG)
 
-The model scored an overall accuracy of 71.43% on these seven test images. Let's explore possible explanations as to why this score is much lower than the corpus' test set of 92.28%
+The model scored an overall accuracy of **71.43%** on these seven test images. Let's explore possible explanations as to why this score is much lower than the corpus' test set of **92.28%**
 
-* The sample size is small with only seven images. That means that one image accounts for over 14 percentage points. The model classified five traffic signs correctly and two incorrectly.
+* The sample size is small with only seven images. That means that one image accounts for over 14 percentage points (a large step). The model classified five traffic signs correctly and two incorrectly.
 
-* The sign 'Beware of Ice/Snow' containes a relatively complex snowflake symbol. As you can see from an example sign, the network's top three prediction got the shape and outline of the sign, but the model failed to determine what exactly what the complicated black symbol was inside the shape.
-![]()
+* The sign 'Beware of Ice/Snow' containes a relatively complex snowflake symbol. As you can see from an example sign, the network's top three prediction got the shape and outline of the sign, but the model failed to determine what exactly was inside the sign. The shape is too intricate; this might be evidence that the network architecture is not robust enough to handle complex symbols.
 
-* As noted previously, I included a taffic sign that the model did indeed train on, however, as is common with traffic signs, there is an additional, smaller rectangular sign directly below it. It appears the model mistook this small, white rectanglular shape to mean 'No Entry' rather than the correct 'Wild Animals Crossing'
+![Beware of Ice/Snow](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-1.JPG)
 
-![]()
+* As noted previously, I included a taffic sign that the model did indeed train on, however, as is common with traffic signs, there is an additional, smaller rectangular sign directly below it. It appears the model mistook this small, white rectanglular shape to mean 'No Entry' rather than the correct 'Wild Animals Crossing'.
 
-* I'd like to point out that the model is acute enough to detect large and small vehicle shapes within each sign. This is evident with the 'No Passing for Vehicles over 3.4 Metric Tons'. The model even follows on our own intuition with its next best guesses as 'End of No Passing by Vehicles over 3.5 Metric Tons' and 'No Passing'.
+![Wild Animals Crossing](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-3.JPG)
 
-![]()
+* I'd like to point out that the model is acute enough to detect large and small vehicle shapes within each sign. This is evident with the 'No Passing for Vehicles over 3.5 Metric Tons'. The model even follows our own intuition with its next best guesses as 'End of No Passing by Vehicles over 3.5 Metric Tons' and 'No Passing'.
 
-* Even when the test image skews the sign 'No Passing', the model picks out the round shape, the white background, and the two car shapes. Interestingly enough, the model is slightly reluctant in its decision as it gives some possibility that the sign is 'End of No Passing'
+![No Passing for Vehicles over 3.4 Metric Tons](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-image-6.JPG)
 
-![]()
+* Even when an image is taken from a different perspective than perpindicular, like with 'No Passing', the model picks out the round shape, the white background, and the two car shapes. Interestingly enough, the model is slightly reluctant in its decision as it gives some possibility that the sign is 'End of No Passing'
+
+![No Passing](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-4.JPG)
 
 * The model appears to ignore defacings to traffic signs and treats extra markings as noise.
 
-![]()
+![Graffitti](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-5.JPG)
 
 Here are the rest of the model's predictions. The layout goes like this:
 
@@ -119,10 +135,11 @@ Here are the rest of the model's predictions. The layout goes like this:
 .
 ```
 
-Note the bottom two rows. Of these rows, the first sign, with the pedestrian and bicycle, was never in the training set. Yet, the model took traights of this sign -- blue, round, white markings -- and still predicted a confident score that it is a 'Mandatory Roundabout'.
+Note the bottom two rows. Of these rows, the first sign, with the pedestrian and bicycle, was never in the training set. Yet, the model took traits of this sign -- blue, round, white markings -- and still predicted a confident score for a 'Mandatory Roundabout'. This shows a bad Recall as the model failed to give prove that it is a capable of observing false negatives which it could do by giving the sign a low probability.
+
 The last image is a picture of myself. Haven't you ever wondered what German traffic sign you are?
 
-![]()
+![all test images](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/all-tests.png)
 
 
 ### Requirements for Submission
