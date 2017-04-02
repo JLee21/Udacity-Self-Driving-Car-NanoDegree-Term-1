@@ -1,6 +1,17 @@
 ## Project: Build a Traffic Sign Recognition Program
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
+Overview
+---
+![]()
+The goal is of this project is to construct a Convolutional Nueral Network to classify German Traffic signs.
+
+This ReadMe outlines the step of the project
+* Data Set Summary & Exploration
+* Design and Test a Model Architecture
+* Analyze Testing Results
+* Analyze Performance on novel German Traffic Signs
+
 Data Set Summary & Exploration
 ---
 I wanted to understand the data that I was working with -- the shape, the values, etc. I went ahead and established the shapes of the data and even graphed the bare bones of the values.
@@ -54,7 +65,8 @@ The number of epochs I settled with is 6. That's like watching season one of Hou
 
 In order to acheive acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given my hypothesis. For example, three epochs probably cuts out much needed additional training for the network.
 
-### Testing Results
+Analyze Testing Results
+---
 I split up the corpus of German traffic sign images into training, validation, and testing sets. Here's how the model performed:
 
 Image Set | Overall Accuracy
@@ -63,7 +75,8 @@ Training | 98.89%
 Validation | 93.51%
 Test | 92.28%
 
-### Performance on Novel German Traffic Signs
+Analyze Performance on novel German Traffic Signs
+---
 I grabbed 7 german traffic signs from Google's image search. By chossing signs with grafitti (or graphics -- Pink Panther) I can see how this may bend the perception of the model. I also chose a sign that had an auxiliary, rectangular sign below -- something the model was not trained on.
 
 ![test images](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-images.JPG)
