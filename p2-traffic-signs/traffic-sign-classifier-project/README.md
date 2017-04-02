@@ -119,7 +119,7 @@ The model scored an overall accuracy of **71.43%** on these seven test images. L
 
 ![Graffitti](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-5.JPG)
 
-Here are the rest of the model's predictions. The layout goes like this:
+Below are the rest of the model's predictions. The layout goes like this:
 
 ```pyython
 --------------------------------------------------------
