@@ -22,7 +22,7 @@ I also grabbed the bigger-picture part of the dataset, like how much I'm working
 Number of training images = 34,799
 Number of validation images = 4,410
 Number of testing images = 12,630
-Image data shape = (32, 32, 3)
+Shape of image = (32, 32, 3)
 Number of classes = 43
 ```
 
