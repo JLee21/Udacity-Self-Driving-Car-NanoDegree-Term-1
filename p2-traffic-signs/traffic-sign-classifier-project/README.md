@@ -44,7 +44,7 @@ Design and Test a Model Architrecture
 ---
 My model architecture of choice is the popular [LeNet-5](https://en.wikipedia.org/wiki/Convolutional_neural_network#LeNet-5) convolutional nueral network first created by Yann LeCunn et al. It's popular for working with 'small' images in that it's designed for handwritten digit classification like zipcodes or numbers in check books. This architecture appeared appropriate as traffic signs are composed of simple abstractions like sign shapes, symbols, numbers, etc.
 
-The only preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implmenting gradient descent.
+The only image preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implmenting gradient descent.
 ```python
 norm_image = cv2.normalize(img, norm_img, alpha=-1, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
 ```
