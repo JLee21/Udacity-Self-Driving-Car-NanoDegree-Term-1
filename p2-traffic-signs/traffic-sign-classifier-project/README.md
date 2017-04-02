@@ -43,9 +43,22 @@ The model architecture allows for a 32x32 picture with three color channels as i
 Layer | Description
 ------|------------
 Input | 32x32x3 RGB image
-Convolution Layer #1 | Convolove the input image from 32x32x3 to 28x28x6
+Convolution | Convolove the input image from 32x32x3 to 28x28x6
 Activation | RELU
-Max Pool Layer #1
+Max Pool | Only select salient pixels. The matrix decreases from 28x28x6 to 14x14x6
+Convolution | Convolove the input image from 14x14x6 to 10x10x6
+Activation | RELU
+Max Pool | Only select salient pixels. The matrix decreases from 10x10x6 to 5x5x16
+Flatten | Flatten the 5x5x16 matrix to an array with length of 400
+Fully Connect | Take input of 400 activations and output 100
+Activation | RELU
+Drop Out | Kill off 50% of the nueron's activations
+Fully Connect | Take input of 100 activations and output 84
+Activation | RELU
+Drop Out | Kill off 50% of the nueron's activations
+Fully Connect | Take input of 84 activations and output 43
+
+
 
 ### Dependencies
 This lab requires:
