@@ -15,23 +15,37 @@ To meet specifications, the project will require submitting three files:
 * the code exported as an html file
 * a writeup report either as a markdown or pdf file 
 
-Creating a Great Writeup
+Data Set Summary & Exploration
 ---
-A great writeup should include the [rubric points](https://review.udacity.com/#!/rubrics/481/view) as well as your description of how you addressed each point.  You should include a detailed description of the code used in each step (with line-number references and code snippets where necessary), and links to other supporting documents or external references.  You should include images in your writeup to demonstrate how your code works with examples.  
+I wanted to understand the data that I was working with -- the shape, the values, etc. I went ahead and established the shapes of the data and even graphed the bare bones of the values.
+I also grabbed the bigger-picture part of the dataset, like how much I'm working with.
 
-All that said, please be concise!  We're not looking for you to write a book here, just a brief description of how you passed each rubric point, and references to the relevant code :). 
+![data set summary](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/basic-data-set-summary.JPG)
 
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup.
+### Data Set Visualization
+I randomly chose a handful of images and their corrsponding sign label from the test set. Some reasons for doing this is to observe traights about the data set so you can prepare for the best and the worst.
+* Simply get a good overview of what you have to work with
+* View the resolution, color, size, darkness, etc.
+* Spot any outliers or unmatched signs
 
-The Project
+![visualize randomly chosen images and their sign lables](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/visualize-data-set.JPG?raw=true)
+
+Design and Test a Model Architrecture
 ---
-The goals / steps of this project are the following:
-* Load the data set
-* Explore, summarize and visualize the data set
-* Design, train and test a model architecture
-* Use the model to make predictions on new images
-* Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
+My model architecture of choice is the popular [LeNet-5](https://en.wikipedia.org/wiki/Convolutional_neural_network#LeNet-5) convolutional nueral network first created by Yann LeCunn et al. It's popular for working with 'small' images in that it's designed for handwritten digit classification like zipcodes or numbers on checks. The only preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implmenting gradient descent for the network.
+```python
+norm_image = cv2.normalize(img, norm_img, alpha=-1, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
+```
+I did not convert the images to grayscale and instead left the color in the images. As we'll see, the model appears to acknowledge the color of the image. 
+
+The model architecture allows for a 32x32 picture with three color channels as its input. The output is a Softmax probablitiy of what the model computes as its decision.
+
+Layer | Description
+------|------------
+Input | 32x32x3 RGB image
+Convolution Layer #1 | Convolove the input image from 32x32x3 to 28x28x6
+Activation | RELU
+Max Pool Layer #1
 
 ### Dependencies
 This lab requires:
