@@ -29,7 +29,7 @@ Number of classes = 43
 ### Data Set Visualization
 Here is a histogram of all of the images that the model will be trained on. Looking at this is important because having a skewed or disproportionate data set will most likely skew the model into biased predictions.
 
-![sign distribution](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/distro-signs.JPG)
+![sign distribution](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/sign-disto.png)
 
 I randomly chose a handful of images and their corresponding sign label from the test set. Some reasons for doing this:
 
