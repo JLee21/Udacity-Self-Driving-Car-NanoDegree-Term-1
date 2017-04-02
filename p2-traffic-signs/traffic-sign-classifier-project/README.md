@@ -1,20 +1,6 @@
 ## Project: Build a Traffic Sign Recognition Program
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-Overview
----
-In this project, you will use what you've learned about deep neural networks and convolutional neural networks to classify traffic signs. You will train and validate a model so it can classify traffic sign images using the [German Traffic Sign Dataset](http://benchmark.ini.rub.de/?section=gtsrb&subsection=dataset). After the model is trained, you will then try out your model on images of German traffic signs that you find on the web.
-
-We have included an Ipython notebook that contains further instructions 
-and starter code. Be sure to download the [Ipython notebook](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb). 
-
-We also want you to create a detailed writeup of the project. Check out the [writeup template](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/writeup_template.md) for this project and use it as a starting point for creating your own writeup. The writeup can be either a markdown file or a pdf document.
-
-To meet specifications, the project will require submitting three files: 
-* the Ipython notebook with the code
-* the code exported as an html file
-* a writeup report either as a markdown or pdf file 
-
 Data Set Summary & Exploration
 ---
 I wanted to understand the data that I was working with -- the shape, the values, etc. I went ahead and established the shapes of the data and even graphed the bare bones of the values.
@@ -66,17 +52,30 @@ I configured my learning rate to be 0.001 -- a typical learning rate value.
 My batch-size is dependent on my local computer resources -- a size of 128 worked well.
 The number of epochs I settled with is 6. That's like watching season one of House of Cards six times. Each time you watch same season (collection of data) and you may get deeper enjoyment with each successive veiwing (a lower caculated loss / higher validation accuracy) but watch it too many times over you'll plateua on the derived enjoyment from the show (stuck at a constant validation accruacy or even overfit on the training data).
 
-In order to acheive acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given my hypothesis. For example, three epochs probably cuts out needed 
+In order to acheive acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given my hypothesis. For example, three epochs probably cuts out much needed additional training for the network.
 
 ### Testing Results
 I split up the corpus of German traffic sign images into training, validation, and testing sets. Here's how the model performed:
+
 Image Set | Overall Accuracy
 ----------|----------
 Training | 98.89%
 Validation | 93.51%
 Test | 92.28%
 
+### Performance on Novel German Traffic Signs
+I grabbed 7 german traffic signs from Google's image search. By chossing signs with grafitti (or graphics -- Pink Panther) I can see how this may bend the perception of the model. I also chose a sign that had an auxiliary, rectangular sign below -- something the model was not trained on.
 
+![test images](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-images.JPG)
+
+The model scored an overall accuracy of 71.43% on these seven test images. Let's explore possible explanations as to why this score is much lower than the corpus' test set of 92.28%
+
+* The sample size is small with only seven images. That means that one image accounts for over 14 percentage points. The model classified five traffic signs correctly and two incorrectly.
+
+* The sign 'Beware of Ice/Snow' containes a relatively complex snowflake symbol. As you can see from an example sign, the network's top three prediction got the shape and outline of the sign, but the model failed to determine what exactly what the complicated black symbol was inside the shape.
+![]()
+
+* The test sign 'No Passing' was taken at an ag
 
 ### Dependencies
 This lab requires:
