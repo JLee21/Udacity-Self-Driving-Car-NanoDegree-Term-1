@@ -15,8 +15,7 @@ This ReadMe outlines the step of the project
 
 Data Set Summary & Exploration
 ---
-I wanted to understand the data that I was working with -- the shape, the values, etc. I went ahead and established the shapes of the data and even graphed the bare bones of the values.
-I also grabbed the bigger-picture part of the dataset, like how much I'm working with.
+I wanted to understand the data that I was working with -- the shape, the values, etc. 
 
 ```python
 Number of training images = 34,799
@@ -50,17 +49,17 @@ norm_image = cv2.normalize(img, norm_img, alpha=-1, beta=1, norm_type=cv2.NORM_M
 ```
 I did not convert the images to grayscale and instead kept the images' color. As we'll see, the model appears to acknowledge the color of the image. 
 
-The model architecture allows for a 32x32 picture with three color channels as its input. The model's output is an array of Softmax probabilities, one for each traffic sign.
+The model architecture allows for a 32x32 picture with three color channels as its input. The model's output is an array of logits, each element corrsponding to a traffic sign.
 
 Layer | Description
 ------|------------
 Input | 32x32x3 RGB image
 Convolution | Convolve the input image from 32x32x3 to 28x28x6
 Activation | RELU
-Max Pool | Only select salient pixels. The matrix decreases from 28x28x6 to 14x14x6
+Max Pool | Only select salient pixels. The matrix changes from 28x28x6 to 14x14x6
 Convolution | Convolve the input image from 14x14x6 to 10x10x6
 Activation | RELU
-Max Pool | Only select salient pixels. The matrix decreases from 10x10x16 to 5x5x16
+Max Pool | Only select salient pixels. The matrix changes from 10x10x16 to 5x5x16
 Flatten | Flatten the 5x5x16 matrix to an array length of 400
 Fully Connect | Take input of 400 activations and output 100
 Activation | RELU
@@ -71,13 +70,13 @@ Drop Out | Kill off 50% of the neurons' activations
 Fully Connect | Take input of 84 activations and output 43
 
 ### Training the model
-The ultimate output of the model (after Softmax is performed on the model's Logits) is an array of predicted probabilities one for each of the 43 traffic signs. Therefor the model is solving a classification problem. The calculated loss will be cross entropy which is a way to compute how 'wrong' or 'off' the model's prediction is for classification scenarios. My optimizer of choice is [Adaptive Moment Estimation](https://www.quora.com/Can-you-explain-basic-intuition-behind-ADAM-a-method-for-stochastic-optimization) or ADAM. Why ADAM? We don't want to use just Gradient Descent -- that would take too long. So we'll implement an approximate, but faster type called Stochastic Gradient Descent or SGD. ADAM is a type of SGD that takes advantage of its previous computed gradients in order to apply wiser, subsequent gradient calculations.
+The ultimate output of the model (after Softmax is performed on the model's Logits) is an array of predicted probabilities one for each of the 43 traffic signs. Therefor the model is solving a classification problem. The calculated loss is perfomed with cross enotropy which is a way to compute how 'wrong' or 'off' the model's prediction is for classification scenarios. My optimizer of choice is [Adaptive Moment Estimation](https://www.quora.com/Can-you-explain-basic-intuition-behind-ADAM-a-method-for-stochastic-optimization) or ADAM. Why ADAM? We don't want to use just Gradient Descent -- that would take too long. So we'll implement an approximate, but faster type called Stochastic Gradient Descent or SGD. ADAM is a type of SGD that takes advantage of its previous computed gradients in order to apply wiser, subsequent gradient calculations.
 
 I configured my learning rate to be 0.001 -- a typical learning rate value.
 My batch-size is dependent on my local computer's resources -- a batch size of a 128 images worked well.
 The number of epochs I settled with is 6. That's like watching season two of House of Cards six times. Each time you watch the same season (collection of data) you may get a deeper enjoyment with each successive viewing (a lower calculated loss / higher validation accuracy / well-adjusted weights) but watch the season too many times and you'll plateau on your derived enjoyment (stuck at a constant validation accuracy / overfitting on the training data / weights that are too attuned to the training data).
 
-In order to achieve an acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given a particular hypothesis. For example, three epochs probably cuts out much needed additional network training -- increasing the dropout percentage too much might make the model unconfident in its decision.
+In order to achieve an acceptable accuracy from the model, I simply tuned certain hyperparameters (epoch, drop-out percentages, etc.) and retrained the network. This allow me to see how the model changes given a particular hypothesis of mine. For example, three epochs probably cuts out much needed additional network training -- increasing the dropout percentage too much might make the model unconfident in its decision.
 
 Analyze Testing Results
 ---
@@ -99,7 +98,7 @@ The model scored an overall accuracy of **71.43%** on these seven test images. L
 
 * The sample size is small with only seven images. That means that one image accounts for over 14 percentage points (a large step). The model classified five traffic signs correctly and two incorrectly.
 
-* The sign **Beware of Ice/Snow** contains a relatively complex snowflake symbol. As you can see from an example sign, the network's top three prediction got the shape and outline of the sign, but the model failed to determine what exactly was inside the sign. The shape is too intricate; this might be evidence that the network architecture is not robust enough to handle complex symbols.
+* The sign **Beware of Ice/Snow** contains a relatively complex snowflake symbol. The network's top three prediction include the shape and outline of the sign, but the model failed to determine what exactly was in the sign's center. The shape is too intricate; this might be evidence that the network architecture is not robust enough to handle complex symbols.
 
 ![Beware of Ice/Snow](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-1.JPG)
 
@@ -107,11 +106,11 @@ The model scored an overall accuracy of **71.43%** on these seven test images. L
 
 ![Wild Animals Crossing](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-3.JPG)
 
-* I'd like to point out that the model is acute enough to detect large and small vehicle shapes within each sign. This is evident with the **No Passing for Vehicles over 3.5 Metric Tons**. The model even follows our own intuition with its next best guesses as **End of No Passing by Vehicles over 3.5 Metric Tons** and **No Passing**.
+* The model appears acute enough to detect large and small vehicle shapes within each sign. This is evident with the **No Passing for Vehicles over 3.5 Metric Tons**. The model even follows our own intuition with its next best guesses as **End of No Passing by Vehicles over 3.5 Metric Tons** and **No Passing**.
 
 ![No Passing for Vehicles over 3.4 Metric Tons](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-image-6.JPG)
 
-* Even when an image is taken from a different perspective than perpendicular, like with **No Passing**, the model picks out the round shape, the white background, and the two car shapes. Interestingly enough, the model is slightly reluctant in its decision as it gives some possibility that the sign is **End of No Passing**.
+* Even when an image is taken from an angle, like with **No Passing**, the model picks out the round shape, the white background, and the two car shapes. Interestingly enough, the model is slightly reluctant in its decision as it gives some possibility that the sign is **End of No Passing**.
 
 ![No Passing](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-4.JPG)
 
@@ -134,7 +133,7 @@ Below are the rest of the model's predictions. The layout goes like this:
 .
 ```
 
-Note the bottom two rows. Of these rows, the first sign, with the pedestrian and bicycle, was never in the model's training set. Yet, the model acknowledged features of this sign -- blue, round, white markings -- and still predicted a confident score for a 'Mandatory Roundabout'. This shows a bad [recall](https://en.wikipedia.org/wiki/Precision_and_recall) as the model failed to prove that it is capable of observing false negatives which it could do by giving the sign a low probability.
+Note the bottom two rows. Of these rows, the first sign -- with the pedestrians and bicycle -- was never in the model's training set. Yet, the model acknowledged features of this sign -- blue, round, white markings -- and still predicted a confident score for a 'Mandatory Roundabout'. This shows a bad [recall](https://en.wikipedia.org/wiki/Precision_and_recall) as the model failed to prove that it is capable of observing false negatives which it could do by giving the sign a low probability.
 
 The last image is a picture of myself. Haven't you ever wondered what German traffic sign you are?
 
