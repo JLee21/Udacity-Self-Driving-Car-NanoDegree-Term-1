@@ -3,7 +3,7 @@
 
 Overview
 ---
-![]()
+![LeNet5 model](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/lenet-model-5.jpg)
 
 The goal is of this project is to construct a Convolutional Nueral Network to classify German Traffic signs.
 
@@ -60,7 +60,7 @@ Activation | RELU
 Max Pool | Only select salient pixels. The matrix decreases from 28x28x6 to 14x14x6
 Convolution | Convolove the input image from 14x14x6 to 10x10x6
 Activation | RELU
-Max Pool | Only select salient pixels. The matrix decreases from 10x10x6 to 5x5x16
+Max Pool | Only select salient pixels. The matrix decreases from 10x10x16 to 5x5x16
 Flatten | Flatten the 5x5x16 matrix to an array length of 400
 Fully Connect | Take input of 400 activations and output 100
 Activation | RELU
