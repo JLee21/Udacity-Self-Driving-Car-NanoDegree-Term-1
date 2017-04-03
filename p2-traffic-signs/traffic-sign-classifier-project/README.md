@@ -19,24 +19,24 @@ I wanted to understand the data that I was working with -- the shape, the values
 I also grabbed the bigger-picture part of the dataset, like how much I'm working with.
 
 ```python
-Number of training examples = 34,799
-Number of validation examples = 4,410
-Number of testing examples = 12,630
-Image data shape = (32, 32, 3)
+Number of training images = 34,799
+Number of validation images = 4,410
+Number of testing images = 12,630
+Shape of image = (32, 32, 3)
 Number of classes = 43
 ```
 
 ### Data Set Visualization
 Here is a histogram of all of the images that the model will be trained on. Looking at this is important because having a skewed or disproportionate data set will most likely skew the model into biased predictions.
 
-![sign distribution](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/distro-signs.JPG)
+![sign distribution](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/sign-disto.png)
 
 I randomly chose a handful of images and their corresponding sign label from the test set. Some reasons for doing this:
 
 * Simply get a good overview of what you have to work with
 * View the resolution, color, size, darkness, etc.
 * Spot any outliers or unmatched signs
-* Note any features that you can take advantage of (color, shape, symbol complexity, etc.)
+* Notice any features that you can take advantage of (color, shape, symbol complexity, etc.)
 
 ![visualize randomly chosen images and their sign lables](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/visualize-data-set.JPG?raw=true)
 
@@ -44,7 +44,7 @@ Design and Test a Model Architrecture
 ---
 My model architecture of choice is the popular [LeNet-5](https://en.wikipedia.org/wiki/Convolutional_neural_network#LeNet-5) convolutional nueral network first created by Yann LeCunn et al. It's popular for working with 'small' images in that it's designed for handwritten digit classification like zipcodes or numbers in check books. This architecture appeared appropriate as traffic signs are composed of simple abstractions like sign shapes, symbols, numbers, etc.
 
-The only preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implmenting gradient descent.
+The only image preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implmenting gradient descent.
 ```python
 norm_image = cv2.normalize(img, norm_img, alpha=-1, beta=1, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_32F)
 ```
@@ -119,7 +119,7 @@ The model scored an overall accuracy of **71.43%** on these seven test images. L
 
 ![Graffitti](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-5.JPG)
 
-Here are the rest of the model's predictions. The layout goes like this:
+Below are the rest of the model's predictions. The layout goes like this:
 
 ```pyython
 --------------------------------------------------------
