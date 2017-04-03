@@ -139,7 +139,3 @@ Note the bottom two rows. Of these rows, the first sign, with the pedestrian and
 The last image is a picture of myself. Haven't you ever wondered what German traffic sign you are?
 
 ![all test images](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/all-tests.png)
-
-
-### Requirements for Submission
-Follow the instructions in the `Traffic_Sign_Classifier.ipynb` notebook and write the project report using the writeup template as a guide, `writeup_template.md`. Submit the project code and writeup document.
