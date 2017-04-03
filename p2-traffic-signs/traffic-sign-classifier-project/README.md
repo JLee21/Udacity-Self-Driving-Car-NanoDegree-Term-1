@@ -41,7 +41,7 @@ I randomly chose a handful of images and their corresponding sign label from the
 
 Design and Test a Model Architecture
 ---
-My model architecture of choice is the popular [LeNet-5](https://en.wikipedia.org/wiki/Convolutional_neural_network#LeNet-5) convolutional neural network first created by Yann LeCunn et al. It's popular for working with 'small' images in that it's designed for handwritten digit classification like zip codes or numbers in check books. This architecture appeared appropriate as traffic signs are composed of simple abstractions like shapes, symbols, numbers, etc. Specifically, the number of feature maps outline in the LeNet-5 appeared to be appropriate as traffic signs may most likely only benefit from a small, limited amount of feature maps given the simplicity of their shape, lines, numbers.
+My model architecture of choice is the popular [LeNet-5](https://en.wikipedia.org/wiki/Convolutional_neural_network#LeNet-5) convolutional neural network first created by Yann LeCunn et al. It's popular for working with 'small' images in that it's designed for handwritten digit classification like zip codes or numbers in check books. This architecture appeared appropriate as traffic signs are composed of simple abstractions like shapes, symbols, numbers, etc. Specifically, the number of feature maps in the LeNet-5 model appeared to be appropriate as traffic signs may most likely only benefit from a small, limited amount of feature maps given the simplicity of their shape, lines, numbers, etc.
 
 The only image preprocessing I performed on the images was to normalize each pixel value as this is a common and necessary step when implementing gradient descent.
 ```python
