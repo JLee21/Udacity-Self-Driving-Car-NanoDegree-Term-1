@@ -121,7 +121,7 @@ The model scored an overall accuracy of **71.43%** on these seven test images. L
 
 Below are the rest of the model's predictions. The layout goes like this:
 
-```python
+```
 --------------------------------------------------------
 <test image 1> | <1st prediction> | <2nd prediction> ...
 --------------------------------------------------------
