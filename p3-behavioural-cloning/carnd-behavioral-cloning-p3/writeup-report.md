@@ -70,12 +70,19 @@ Activation | RELU
 Drop Out | Kill off 10% of the previous neurons' activations
 Fully Connect | Take input of the Flatten layer and link to 100 neurons
 Activation | RELU
-Fully Connect | Take input of the Flatten layer and link to 10 neurons
+Fully Connect | Take input of the previous layer and link to 10 neurons
 Activation | RELU
-Fully Connect | Take input of the Flatten layer and link to 1 neuron
+Fully Connect | Take input of the previous layer and link to 1 neuron
+
+Input
+---
+The input of the model is a resized image from the generator. The model also crops away the top and bottom of the image -the sky and the car's hood- as these are parts of the image are unrelated to the steering angle.
+Input normalization is important for all neural networks to allow for a successful and effecient gradient descent--this model is no exception--a Lamnda layer normalizes all pixel values from a range of 0-255 to +/- 0.5
+Activation
+---
+The model includes Rectified Linear Unit (ReLU) Activation layers to introduce nonlinearity. This type of activation ignores negative inputs and is shown to be computationally efficient for deep neural networks.
 
 
-The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
 
 
 
