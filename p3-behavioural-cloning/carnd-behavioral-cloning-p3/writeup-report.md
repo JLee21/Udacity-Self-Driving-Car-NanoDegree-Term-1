@@ -1,21 +1,14 @@
-## Project: Build a Traffic Sign Recognition Program
+## Project: Implement Behaviorial Cloning in a Car Simulator
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
 Overview
 ---
-
----
-
-**Behavioral Cloning Project**
-
-The goals / steps of this project are the following:
+The goals / steps of this project:
 * Use the simulator to collect data of good driving behavior
 * Build, a convolution neural network in Keras that predicts steering angles from images
 * Train and validate the model with a training and validation set
 * Test that the model successfully drives around track one without leaving the road
-* Summarize the results with a written report
-
-
+---
 [//]: # (Image References)
 
 [image1]: ./examples/placeholder.png "Model Visualization"
@@ -38,7 +31,7 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md or writeup_report.pdf summarizing the results
+* writeup-report.md summarizing the results
 
 ####2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -54,9 +47,37 @@ The model.py file contains the code for training and saving the convolution neur
 
 ####1. An appropriate model architecture has been employed
 
-My model consists of a convolution neural network with 3x3 filter sizes and depths between 32 and 128 (model.py lines 18-24) 
+My model is constructed in the cell **Construct Model** within `ai-model-notebook`.
+The model follows the following structure:
+
+Layer | Description
+------|------------
+Input / Cropping | Accept a input image with a resized shape of (64,64,1). Also, crop the top 21% and bottom 8% of the image
+Lambda | Normalize the pixel values of each image from a range of 0-255 to +/- 0.5
+Convolution | Convolve image into 32 feature maps using a 5x5 kernel size
+Activation | RELU
+Max Pool | Only select salient pixels with a kernel size of 2x2
+Convolution | Convolve previous layer into 64 feauture maps using a 5x5 kernel size
+Activation | RELU
+Max Pool | Only select salient pixels with a kernel size of 2x2
+Convolution | Convolve previous layer into 128 feauture maps using a 3x3 kernel size
+Activation | RELU
+Max Pool | Only select salient pixels with a kernel size of 2x2
+Drop Out | Kill off 20% of the previous neurons' activations
+Flatten | Take the previous layer's activation and flatten the values into an array
+Fully Connect | Take input of the Flatten layer and link to 512 neurons
+Activation | RELU
+Drop Out | Kill off 10% of the previous neurons' activations
+Fully Connect | Take input of the Flatten layer and link to 100 neurons
+Activation | RELU
+Fully Connect | Take input of the Flatten layer and link to 10 neurons
+Activation | RELU
+Fully Connect | Take input of the Flatten layer and link to 1 neuron
+
 
 The model includes RELU layers to introduce nonlinearity (code line 20), and the data is normalized in the model using a Keras lambda layer (code line 18). 
+
+
 
 ####2. Attempts to reduce overfitting in the model
 
