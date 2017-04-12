@@ -84,8 +84,15 @@ Activation
 ---
 The model includes Rectified Linear Unit (ReLU) Activation layers to introduce nonlinearity. This type of activation ignores negative inputs and is shown to be computationally efficient for deep neural networks.
 
+Convolution / MaxPool
+---
+[](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)
+I implemented a similar architecture to NVidia's end-to-end model. Similar to other student's architecture, [here]() and [here]() as well as NVidia's, a common theme to extract more and more feature layers with each subsequent convolutional layer. The resoning is that each convolution layer extracts higher and higher levels of abstractions from the previous convolution layer.
+This is why I the depth of each of my convolution layers are 32, 64, 128.
 
-
+![]()
+![]()
+![]()
 
 
 ####2. Attempts to reduce overfitting in the model
@@ -116,7 +123,7 @@ In order to gauge how well the model was working, I split my image and steering 
 
 To combat the overfitting, I modified the model so that ...
 
-Then I ... 
+I implemented a piece of advice from my previous project review in that the model's training is conditional on its improvement; it stops training when the error loss stops decreasing. I average the last three validation loss and compared that value with the current validation loss -- if the current one is less than the average loss continue training! In addition, the model is saved after each epoch, that is, only if the validation loss improves.
 
 The final step was to run the simulator to see how well the car was driving around track one. There were a few spots where the vehicle fell off the track... to improve the driving behavior in these cases, I ....
 
