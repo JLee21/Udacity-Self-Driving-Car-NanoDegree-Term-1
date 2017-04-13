@@ -4,7 +4,7 @@
 Overview
 ---
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/video.gif)
-
+**The purpose of this project is to clone human driving behaviour by implementing a Deep Convolutional Neural Network**
 Project Outline
 ---
 * Files Submitted 
