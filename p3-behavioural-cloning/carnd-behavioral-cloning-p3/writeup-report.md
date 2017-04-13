@@ -6,11 +6,11 @@ Overview
 
 Project Content
 ---
-### Files Submitted 
-### Collect Driving Data
-### Build a Deep Neural Network
-### Train and Valide
-### Test the Model
+* Files Submitted 
+* Collect Driving Data
+* Build a Deep Neural Network
+* Train and Validate
+* Test the Model
 ---
 [//]: # (Image References)
 
