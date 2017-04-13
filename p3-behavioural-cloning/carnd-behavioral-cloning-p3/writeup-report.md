@@ -66,7 +66,7 @@ Before image preprocessing, each image starts off as a Red, Green, and Blue chan
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
 
-The image is then converted to a Hue Saturation Value (HSV) image and the Saturation channel is extracted. Exctracting just the S-channel helped the car detect the boundaries of the road bigly because it allows the edges of the road to standout while the road itself appears as a mostly flat color.
+The image is then converted to a Hue Saturation Value (HSV) image and the Saturation channel is extracted. Exctracting just the S-channel helped the car detect the boundaries as it allows the edges of the road to standout while the road itself appears as a mostly flat color.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/hsv-image.JPG)
 
@@ -205,5 +205,4 @@ Ultimately, a successful model means that the car is able to drive one lap aroun
 * not climb or hit any of the road's raised ledges
 * not hit any of the landmarks of the course (posts, bridge railing, etc.)
 
-
-No tire may leave the drivable portion of the track surface. The car may not pop up onto ledges or roll over any surfaces that would otherwise be considered unsafe (if humans were in the vehicle).
+The final video of the car driving autonomously is uploaded as `video.mp4`
