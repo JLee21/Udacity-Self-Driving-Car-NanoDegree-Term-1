@@ -17,12 +17,6 @@ Project Outline
 ---
 [//]: # (Image References)
 [image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
-[image7]: ./examples/placeholder_small.png "Flipped Image"
 
 ## Files Submitted
 #### Submission includes all required files and can be used to run the simulator in autonomous mode
@@ -44,7 +38,7 @@ python drive.py model.h5
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ## Data Collection  
-The car records what it sees with a virtual camera at the front of the vehicle. Along with the car's corresponding steering angle, this is what the data collection consists of.
+The car records what it sees with a virtual camera at the front of the vehicle. This is the input of the model. The steering angle is also recorded and is linked to that camera image. The steering angle is the output or target for the model; the closer the model can predict the correct steering angle for a corresponding image the better the model performs, generally.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
 
@@ -52,8 +46,7 @@ The charts below show the distribution of all the data collected. Note that no i
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steering-angle-distribution.PNG)
 
-I recruited a friend to drive the car around the track as close to perfection as possible. One clockwise and one counterclockwise. He also included extreme turn corrections because the car needed to learn how to recover its deviation from the center of the road.
-
+I recruited a friend to drive the car around the track as close to perfection as possible. One clockwise and one counterclockwise. He also included extreme turn corrections because the car needed to learn how to recover in case it deviates far from the center of the road.
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/extreme-turns.JPG)
 
 To avoid the car from being biased toward turning left or right, additional image/steering angle data was added by using OpenCV's flip method. The steering angle also had to be flipped as well
@@ -67,13 +60,13 @@ To further train the car to return to the center of the lane, I took adavantage 
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steer-offsets.JPG)
 
-For each image that goes into training the model enters an image pipeline (located in the notebook's cells `Create Generator Helper Functions`
+For each image that goes into training the model enters an image pipeline (located in the notebook's cell block `Create Generator Helper Functions`
 
-Before image preprocessing, each image starts off as a Red, Green, and Blue channeld image (160x320x3)
+Before image preprocessing, each image starts off as a Red, Green, and Blue channel image (160x320x3)
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
 
-The image is then converted to a Hue Saturation Value (HSV) image and the Saturation channel is extracted. Exctracting just the S-channel helped the car detect the boundaries of the road greatly because it allows the edges of the road to standout while the road itself appears as a mostly flat color.
+The image is then converted to a Hue Saturation Value (HSV) image and the Saturation channel is extracted. Exctracting just the S-channel helped the car detect the boundaries of the road bigly because it allows the edges of the road to standout while the road itself appears as a mostly flat color.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/hsv-image.JPG)
 
