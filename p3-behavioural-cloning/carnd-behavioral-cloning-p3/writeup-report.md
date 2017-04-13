@@ -188,7 +188,7 @@ The model's loss is calculated using Mean Squared Error (MSE) loss. This was cho
 
 Training Strategy
 ---
-I implemented a piece of advice from my previous project review in that the model's training is conditional on its improvement; it stops training when the error loss stops decreasing. I average the last three validation loss and compared that value with the current validation loss -- if the model's current validation loss is less than the average loss continue training. In addition, the model is saved after each epoch, that is, only if the validation loss improves.
+I implemented a piece of advice from my previous project review in that the model's training is conditional on its calculated loss imporvement; it stops training when the error loss stops decreasing. I average the last three validation loss and compared that value with the current validation loss -- if the model's current validation loss is less than the average loss continue training. In addition, the model is saved after each epoch, that is, only if the validation loss improves.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/model-mean-squared-error-loss.png)
 
