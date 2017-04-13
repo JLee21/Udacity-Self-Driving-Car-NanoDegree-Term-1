@@ -25,7 +25,7 @@ Project Outline
 #### Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
-* model.py containing the script to create and train the model
+* The main notebook - ai-model-notebook.ipynb - containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup-report.md summarizing the results
@@ -38,6 +38,55 @@ python drive.py model.h5
 
 #### Submission code is usable and readable
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
+
+## Data Collection  
+
+The car records what it sees with a virtual camera at the front of the vehicle. Along with the car's corresponding steering angle, this is what the data collection consists of.
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.png)
+
+I recruited a friend to drive the car around the track as close to perfection as possible. One clockwise and one counterclockwise. He also included extreme turn corrections because the car needed to learn how to recover its deviation from the center of the road.
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/extreme-turns.png)
+
+To avoid the car from being biased toward turning left or right, additional image/steering angle data was added by using OpenCV's flip method.
+```python
+cv2.flip(img, 1)
+```
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/image-flip.png)
+
+To further train the car to return to the center of the lane, I took adavantage of the left and right cameras on the car. Essentially, I treated the car's left camera as its center-facing camera and changed the steering angle by an offset. That way, if the car center camera sees a picture similar to its left camera image, it will be trained to return to the lane's center.
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steer-offsets.png)
+
+For each image that goes into training the model enters an image pipeline (located in the notebook's cells `Create Generator Helper Functions`
+
+Before image preprocessing, each image starts off as a Red, Green, and Blue channeld image (160x320x3)
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.png)
+
+The image is then converted to a Hue Saturation Value (HSV) image and the Saturation channel is extracted. Exctracting just the S-channel helped the car detect the boundaries of the road greatly because it allows the edges of the road to standout while the road itself appears as a mostly flat color.
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/hsv-image.png)
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/only-saturation-image.png)
+
+By now, the shape of the image is (160x320x1), where there is only one channel (3 -> 1). The model simply does not need those original dimensions even though they help us humans see what the car sees. A image size of 64x64 works well for training (not to mention the huge amount of training time saved!). In addition to resizing the image, the model doesn't need to be trained on the sky (top of the image) nor the hood of the car (bottom of the image) so let's crop those parts.
+```python
+rows, cols = 64, 64
+cv2.resize(img, (rows, cols), cv2.INTER_AREA)
+
+# cropping is performed within a Keras layer Cropping2D as mentioned later
+```
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/resized-imgae.PNG)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/cropped-final-image.png)
+
+Train and Validate Split
+---
+A train/validate data split of 20% was implemented:
+```
+python train_samples, validation_samples = train_test_split(lines, test_size=0.2)
+```
 
 ## Build a Deep Nerual Network
 My model is constructed in the cell **Construct Model** within `ai-model-notebook`.
@@ -70,7 +119,7 @@ Fully Connect | Take input of the previous layer and link to 1 neuron
 Input
 ---
 
-The input of the model is a resized image from the generator. Resizing the image greatly increases training time without giving up detail for training. A few student blogs recommended 64x64 pixels (here)[http://ottonello.gitlab.io/selfdriving/nanodegree/2017/02/09/behavioral_cloning.html] and (here)[https://chatbotslife.com/using-augmentation-to-mimic-human-driving-496b569760a9]
+The input of the model is a resized image from the generator. Resizing the image greatly increases training time without giving up detail for training. A few student blogs recommended 64x64 pixels [here](http://ottonello.gitlab.io/selfdriving/nanodegree/2017/02/09/behavioral_cloning.html) and [here](https://chatbotslife.com/using-augmentation-to-mimic-human-driving-496b569760a9)
 ```python
 model.add(Cropping2D(cropping=((14,5),(0,0)), input_shape=(64, 64, 1)))
 ```
@@ -130,28 +179,4 @@ I implemented a piece of advice from my previous project review in that the mode
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/model-mean-squared-error-loss.png)
 
-## Data Collection  To capture good driving behavior, I first recorded two laps on track one using center lane driving. Here is an example image of center lane driving:
-
-![alt text][image2]
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
-
-Then I repeated this process on track two in order to get more data points.
-
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
-
-![alt text][image6]
-![alt text][image7]
-
-Etc ....
-
-After the collection process, I had X number of data points. I then preprocessed this data by ...
-
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set. 
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+I found the absolute value of the training or validation mean squared error loss was not an explicit indicator that the car would drive successfully.
