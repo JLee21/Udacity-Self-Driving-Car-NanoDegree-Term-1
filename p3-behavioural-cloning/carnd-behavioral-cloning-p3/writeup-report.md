@@ -164,11 +164,11 @@ After testing various implementations of the number of fully connected layers an
 
 Drop Out Layers
 ---
-I added two drop out layers that only drop a small percentage of the previous layers' activations.
+I added two drop out layers that only drop a small percentage of the previous layers' activations. For example,
 ```python
 model.add(Dropout(0.2))
 ```
-Before adding the dropout layers, I noticed the car would become 'stickier' to certain parts of the course -- as if it memorized exactly where it wanted to go. If my dropout was too much , the car's driving appeared to be more 'slippery' in that it seemed to refuse to stick on a particular path and would drift, especially on the curves. I ended up only dropping 20% of the third convolution layer's activation and only 10% of the first fully connected layer's activations.
+Before adding the dropout layers, I noticed the car would become 'stickier' to certain parts of the course -- as if it memorized exactly where it wanted to go even if that meant making stark and questionable turns. If my dropout was too much , the car's driving appeared to be more 'slippery' in that it seemed to refuse to stick to a particular path and would drift, especially on the curves. I ended up only dropping 20% of the third convolution layer's activation and only 10% of the first fully connected layer's activations.
 
 Model Optimizer and Loss Calculator
 ---
@@ -180,7 +180,7 @@ For the model's loss calculation, the driving challenge is similar to solving a 
 
 ![http://pgfplots.net/tikz/examples/regression-residuals/](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/regression-example.JPG)
 
-[image source](http://pgfplots.net/tikz/examples/regression-residuals/)
+[*image source](http://pgfplots.net/tikz/examples/regression-residuals/)
 
 The model's loss is calculated using Mean Squared Error (MSE) loss. This was chosen as the model tries to *fit* not *classify* a target steering angle to its input image. 
 
@@ -188,21 +188,21 @@ The model's loss is calculated using Mean Squared Error (MSE) loss. This was cho
 
 Training Strategy
 ---
-I implemented a piece of advice from my previous project review in that the model's training is conditional on its calculated loss improvement; it stops training when the error loss stops decreasing. I average the last three validation loss and compared that value with the current validation loss -- if the model's current validation loss is less than the average loss continue training. In addition, the model is saved after each epoch, that is, only if the validation loss improves.
+I implemented a piece of advice from my previous project review in that the model's training is conditional on its calculated loss improvement; it stops training when the error loss stops decreasing. I averaged the last three validation loss and compared that value with the current validation loss -- if the model's current validation loss is less than the average loss continue training. In addition, the model is saved after each epoch, that is, only if the validation loss improves. This strategy is implemented cell block `Train, Validate, and Save Model`
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/model-mean-squared-error-loss.png)
 
 I found the absolute value of the training or validation MSE loss was not an explicit indicator that the car would drive successfully.
 
-After the car successfully drove around most of the track, I noticed trouble spots on the course: sharp turns. Although tuning parts of the model may help (Dropout, MaxPool, more/less fully connected layers, etc) I realized more training was needed just in just those sharp turns. I drove/trained the car on how to approach the turns with six iterations for each turn. I also emphasized hugging the inner curve. As human drivers, it's much more natural to turn closer to the inner curve and override the sensation of centripetal force than to let the car drift to the outer curve.
+After the car successfully drove around most of the track, I noticed trouble spots on the course: sharp turns. Although tuning parts of the model helped (Dropout, MaxPool, more/less fully connected layers, etc) I realized more training was needed just in those sharp turns. I drove/trained the car on how to approach the turns with six iterations for each turn. I also emphasized hugging the inner curve. As human drivers, it's much more natural to turn closer to the inner curve and override the sensation of centripetal force than to let the car drift to the outer curve.
 
 ## Test the Model
 
 Ultimately, a successful model means that the car is able to drive one lap around a test track. 
 
 **The car shall:**
-* not have its tire leave the any part of the track
+* not have its tires leave the any part of the track
 * not climb or hit any of the road's raised ledges
-* not hit any of the landmarks of the course (posts, bridge railing, etc.)
+* not hit any of the coure's landmarks/structures (posts, bridge railing, etc.)
 
 The final video of the car driving autonomously is uploaded as `video.mp4`
