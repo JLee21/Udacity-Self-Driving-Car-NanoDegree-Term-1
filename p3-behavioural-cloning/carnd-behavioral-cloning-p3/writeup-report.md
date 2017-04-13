@@ -4,10 +4,16 @@
 Overview
 ---
 The goals / steps of this project:
-* Use the simulator to collect data of good driving behavior
-* Build, a convolution neural network in Keras that predicts steering angles from images
-* Train and validate the model with a training and validation set
-* Test that the model successfully drives around track one without leaving the road
+ ## File Submitted 
+    outline project contents
+## Collect Driving Data
+    use the simulator to collect data of good driving behavior
+## Build a Deep Neural Network
+    build a deep convolution neural network in Keras that predicts steering angles from images
+## Train and Valide
+    train and validate the model with a training and validation set
+## Test the Model
+    Test that the model successfully drives around track one without leaving the road
 ---
 [//]: # (Image References)
 
@@ -19,7 +25,6 @@ The goals / steps of this project:
 [image6]: ./examples/placeholder_small.png "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
----
 ### Files Submitted
 
 #### Submission includes all required files and can be used to run the simulator in autonomous mode
