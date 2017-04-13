@@ -72,7 +72,7 @@ The image is then converted to a Hue Saturation Value (HSV) image and the Satura
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/only-saturation-image.JPG)
 
-By now, the shape of the image is (160x320x1), where there is only one channel and not three (3 -> 1). The model simply does not need those original spatial dimensions (160x320) even though they help us humans see what the car sees. A image size of 64x64 works well for training as this retains enough data to train (not to mention the huge amount of training time saved!). In addition to resizing the image, the model doesn't need to be trained on the sky (top of the image) nor the hood of the car (bottom of the image) so let's crop those parts.
+By now, the shape of the image is (160x320x1), where there is only one channel and not three (3 -> 1). The model simply does not need those original spatial dimensions (160x320) even though they help us humans see what the car sees. A image size of 64x64 works well for training as this retains enough data to train (not to mention the huge amount of training time saved!). In addition to resizing the image, the model doesn't need to be trained on the sky (top of the image) nor the hood of the car (bottom of the image) those parts are cropped.
 ```python
 rows, cols = 64, 64
 cv2.resize(img, (rows, cols), cv2.INTER_AREA)
@@ -84,7 +84,7 @@ cv2.resize(img, (rows, cols), cv2.INTER_AREA)
 
 Train and Validate Split
 ---
-A train/validate data split of 20% was implemented:
+A train/validate data split of 20% was implemented. `line` is a list of all image data and steering angles.
 ```
 python train_samples, validation_samples = train_test_split(lines, test_size=0.2)
 ```
@@ -92,18 +92,18 @@ python train_samples, validation_samples = train_test_split(lines, test_size=0.2
 Python Generator
 ---
 A python generator was created for a couple of reasons. 
-* We don't want to load thousands of images all at once into the computer's RAM. Instead the images are loaded in small batches from a SSD (I found a SSD has about a 50% speed increase compared to a HD).
-* We can image process these small batches of images when it's needed by the model
+* We don't want to load thousands of images all at once into the computer's RAM. Instead, the images are loaded in small batches from a SSD (I found a SSD has about a 50% speed increase compared to a HD).
+* We can image process these small batches of images on an as-needed basis
 The generator was created in the cell block `Create Generator` and the generator is implemented in the cell block `Train, Validate, and Save Model`. In addition, a generator for the validation images was used as well.
 ```python
  model.fit_generator(generator=train_generator ... validation_data=validation_generator)
 ```
 During training, the model is trained on one small batch of images at a time. Here's the distribution of steering angles of five randomly chosen batches.
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/batch-distribution.png)
-Unlike the original, unprocessed distribution of steering angles as shown earlier, the distributuion of each batch better resembles a normal Gaussian distribution. This is important as this enables the car to be robust in accepting multiple images with differnt corresponding steering angles. In other words, we want the car to drive straight in the middle of the road -- most of the time -- but we also want the car to know what to do during sharp turns, gradual turns, center-of-the-lane offsets, etc.
+Unlike the original, unprocessed distribution of steering angles as shown earlier in **Data Collection**, the distributuion of each batch resembles a normal Gaussian distribution. This is important as this enables the car to be robust in accepting multiple images with differnt corresponding steering angles. In other words, we want the car to drive straight in the middle of the road -- most of the time -- but we also want the car to know what to do during sharp turns, gradual turns, center-of-the-lane deviations, etc.
 
 ## Build a Deep Nerual Network
-My model is constructed in the cell **Construct Model** within `ai-model-notebook`.
+My model is constructed in the cell block `Construct Model`.
 The model follows the following structure:
 
 Layer | Description
@@ -133,12 +133,12 @@ Fully Connect | Take input of the previous layer and link to 1 neuron
 Input
 ---
 
-The input of the model is a resized image from the generator. Resizing the image greatly increases training time without giving up detail for training. A few student blogs recommended 64x64 pixels [here](http://ottonello.gitlab.io/selfdriving/nanodegree/2017/02/09/behavioral_cloning.html) and [here](https://chatbotslife.com/using-augmentation-to-mimic-human-driving-496b569760a9)
+The input of the model is a resized image from the generator. Resizing the image imporoves training time without giving up detail. A few students' blogs recommended a spatial size of 64x64 pixels [here](http://ottonello.gitlab.io/selfdriving/nanodegree/2017/02/09/behavioral_cloning.html) and [here](https://chatbotslife.com/using-augmentation-to-mimic-human-driving-496b569760a9)
 ```python
 model.add(Cropping2D(cropping=((14,5),(0,0)), input_shape=(64, 64, 1)))
 ```
 The model also crops away the top and bottom of the image -the sky and the car's hood- as these are parts of the image are unrelated to the steering angle.
-Input normalization is important for all neural networks to allow for a successful and effecient gradient descent--this model is no exception--a Lambda layer normalizes all pixel values from a range of 0-255 to +/- 0.5
+Input normalization is important for all neural networks to allow for a successful and effecient gradient descent. A Lambda layer normalizes all pixel values from a range of 0-255 to +/- 0.5
 ```python
 model.add(Lambda(lambda x: x / 255.0 - 0.5))
 ```
@@ -149,9 +149,8 @@ The model includes Rectified Linear Unit (ReLU) Activation layers to introduce n
 
 Convolution / MaxPool
 ---
-[](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)
-I implemented a similar architecture to NVidia's end-to-end model. Similar to other student's architecture, [here]() and [here]() as well as [NVidia's](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf), a common theme to extract more and more feature layers with each subsequent convolutional layer. The resoning is that each convolution layer extracts higher and higher levels of abstractions from the previous convolution layer.
-This is why I the depth of each of my convolution layers are 32, 64, 128. You can see below that the each convolution layer get higher and higher in abstraction.
+I implemented a similar architecture to NVidia's [end-to-end model](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). Similar to other student's architecture, [here]() and [here]() as well as NVidia's, a common tactic is to extract more and more feature layers with each subsequent convolutional layer. The reasoning is that each convolution layer extracts higher and higher levels of abstractions from the previous convolution layer. 
+This is why I chose the depth of each of my convolution layers to be 32, 64, and 128. Below is a peek of the model's feature maps for each convlution layer for a single test image. The first convolution layer containes 32 feature maps. Areas with more white resemble high-activations areas - parts of the nerual network that become 'excited' and propogate deeper into the network.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-1.png)
 
@@ -161,7 +160,7 @@ This is why I the depth of each of my convolution layers are 32, 64, 128. You ca
 
 Fully Connected Layers
 ---
-After testing various implementations of the number of fully connected layers and the number of connections each one hold, I ened up using four fully connected layers. The model concludes with a single output neruon that denotes a steering angle, as this driving challenge is a regression one, not classification. I found that the number of neurons made no significant impact on the performance of the car, although increasing the number of neurons also increased training time. Ultimately, the goal is to decrease the number of neruons in each subsequent layer until the desired number is reached: 512 -> 100 -> 50 -> 10 -> 1
+After testing various implementations of the number of fully connected layers and the number of connections each one hold, I ened up using four fully connected layers. The model concludes with a single output neruon that denotes a normalized steering angle value. I found that the number of neurons made no significant impact on the performance of the car, although increasing the number of neurons also increased training time. Ultimately, the goal is to decrease the number of neruons in each subsequent layer until the desired number is reached: 512 -> 100 -> 50 -> 10 -> 1
 
 Drop Out Layers
 ---
@@ -169,32 +168,41 @@ I added two drop out layers that only drop a small percentage of the previous la
 ```python
 model.add(Dropout(0.2))
 ```
-Before adding the dropout layers, I noticed the car would become 'stickier' to certain parts of the course -- as if it memorized exactly what it wanted to do. If I added too much droppage, the car seemed to be more 'slippery' in that it seemed to refuse to stick on a particular path and would drift, especially on the curves. I ended up only dropping 20% of the third convolution layer's activation and only 10% of the first fully connected layer's activations.
-
-The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
+Before adding the dropout layers, I noticed the car would become 'stickier' to certain parts of the course -- as if it memorized exactly where it wanted to go. If my dropout was too much , the car's driving appeared to be more 'slippery' in that it seemed to refuse to stick on a particular path and would drift, especially on the curves. I ended up only dropping 20% of the third convolution layer's activation and only 10% of the first fully connected layer's activations.
 
 Model Optimizer and Loss Calculator
 ---
-I chose a ADAM optimizerr (code cell titled `Train, Validate, and Save Model`). A learning rate does not need to be implemented as this is built into the optimizer. ADAM is a type of SGD that takes advantage of its previous computed gradients in order to apply wiser, subsequent gradient calculations.
+I chose a ADAM optimizerr (code cell `Train, Validate, and Save Model`). A learning rate does not need to be implemented as this is built into the optimizer. ADAM is a type of SGD that takes advantage of its previous computed gradients in order to apply wiser, subsequent gradient calculations.
 ```python
 model.compile(loss='mse', optimizer='adam')
 ```
-Much like solving a simple regression problem: 
+For the model's loss calculation, the driving challenge is similar to solving a classic regression problem:
 
 ![http://pgfplots.net/tikz/examples/regression-residuals/](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/regression-example.JPG)
 
 [image source](http://pgfplots.net/tikz/examples/regression-residuals/)
 
-the model's loss is calculated using Mean Squared Error loss. This was chosen as the model tries to *fit* not *classify* a steering angle to its input image. 
+The model's loss is calculated using Mean Squared Error (MSE) loss. This was chosen as the model tries to *fit* not *classify* a target steering angle to its input image. 
 
 ## Train and Validate
 
 Training Strategy
 ---
-I implemented a piece of advice from my previous project review in that the model's training is conditional on its improvement; it stops training when the error loss stops decreasing. I average the last three validation loss and compared that value with the current validation loss -- if the current one is less than the average loss continue training! In addition, the model is saved after each epoch, that is, only if the validation loss improves.
+I implemented a piece of advice from my previous project review in that the model's training is conditional on its improvement; it stops training when the error loss stops decreasing. I average the last three validation loss and compared that value with the current validation loss -- if the model's current validation loss is less than the average loss continue training. In addition, the model is saved after each epoch, that is, only if the validation loss improves.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/model-mean-squared-error-loss.png)
 
-I found the absolute value of the training or validation mean squared error loss was not an explicit indicator that the car would drive successfully.
+I found the absolute value of the training or validation MSE loss was not an explicit indicator that the car would drive successfully.
 
-After the car successfully drove around most of the track, I noticed trouble spots on the course: sharp turns. Although tuning parts of the model may help (Dropout, MaxPool, more/less fully connected layers, etc) I realized more training was needed just in those sharp turns. I drove/trained the car on how to approach the turns - six iterations for each turn. I also emphasized hugging the inner curve. As human drivers, it's much more natural to turn closer to the inner curve and override the sensation of centripetal force than to let the car drift to the outer curve.
+After the car successfully drove around most of the track, I noticed trouble spots on the course: sharp turns. Although tuning parts of the model may help (Dropout, MaxPool, more/less fully connected layers, etc) I realized more training was needed just in just those sharp turns. I drove/trained the car on how to approach the turns with six iterations for each turn. I also emphasized hugging the inner curve. As human drivers, it's much more natural to turn closer to the inner curve and override the sensation of centripetal force than to let the car drift to the outer curve.
+
+## Test the Model
+
+Ultimately, a successful model means that the car is able to drive one lap around a test track. 
+**The car shall:**
+* not have its tire leave the any part of the track
+* not climb or hit any of the road's raised ledges
+* not hit any of the landmarks of the course (posts, bridge railing, etc.)
+
+
+No tire may leave the drivable portion of the track surface. The car may not pop up onto ledges or roll over any surfaces that would otherwise be considered unsafe (if humans were in the vehicle).
