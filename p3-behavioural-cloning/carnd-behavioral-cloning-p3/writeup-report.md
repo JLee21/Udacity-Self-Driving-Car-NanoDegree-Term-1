@@ -199,6 +199,7 @@ After the car successfully drove around most of the track, I noticed trouble spo
 ## Test the Model
 
 Ultimately, a successful model means that the car is able to drive one lap around a test track. 
+
 **The car shall:**
 * not have its tire leave the any part of the track
 * not climb or hit any of the road's raised ledges
