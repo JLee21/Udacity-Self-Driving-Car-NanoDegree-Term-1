@@ -45,6 +45,10 @@ The car records what it sees with a virtual camera at the front of the vehicle. 
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.png)
 
+The charts below show the distribution of all the data collected. Note that no image processing/augmentation has taken place.
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steering-angle-distribution.PNG)
+
 I recruited a friend to drive the car around the track as close to perfection as possible. One clockwise and one counterclockwise. He also included extreme turn corrections because the car needed to learn how to recover its deviation from the center of the road.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/extreme-turns.png)
@@ -95,11 +99,11 @@ A python generator was created for a couple of reasons.
 * We can image process these small batches of images when it's needed by the model
 The generator was created in the cell block `Create Generator` and the generator is implemented in the cell block `Train, Validate, and Save Model`. In addition, a generator for the validation images was used as well.
 ```python
- model.fit_generator(generator=train_generator ... 
+ model.fit_generator(generator=train_generator ... validation_data=validation_generator)
 ```
-```python
-validation_data=validation_generator)
-```
+During training, the model is trained on one small batch of images at a time. Here's the distribution of steering angles of five randomly chosen batches.
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/batch-distribution.png)
+Unlike the original, unprocessed distribution of steering angles as shown earlier, the distributuion of each batch better resembles a Gaussian distribution.
 
 ## Build a Deep Nerual Network
 My model is constructed in the cell **Construct Model** within `ai-model-notebook`.
