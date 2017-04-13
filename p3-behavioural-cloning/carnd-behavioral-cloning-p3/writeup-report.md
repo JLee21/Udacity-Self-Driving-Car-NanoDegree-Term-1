@@ -48,7 +48,7 @@ The car records what it sees with a virtual camera at the front of the vehicle. 
 
 The charts below show the distribution of all the data collected. Note that no image processing/augmentation has taken place.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steering-angle-distribution.JPG)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steering-angle-distribution.png)
 
 I recruited a friend to drive the car around the track as close to perfection as possible. One clockwise and one counterclockwise. He also included extreme turn corrections because the car needed to learn how to recover its deviation from the center of the road.
 
