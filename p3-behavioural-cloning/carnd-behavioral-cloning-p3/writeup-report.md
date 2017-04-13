@@ -44,38 +44,38 @@ The model.py file contains the code for training and saving the convolution neur
 
 The car records what it sees with a virtual camera at the front of the vehicle. Along with the car's corresponding steering angle, this is what the data collection consists of.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.png)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
 
 The charts below show the distribution of all the data collected. Note that no image processing/augmentation has taken place.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steering-angle-distribution.PNG)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steering-angle-distribution.JPG)
 
 I recruited a friend to drive the car around the track as close to perfection as possible. One clockwise and one counterclockwise. He also included extreme turn corrections because the car needed to learn how to recover its deviation from the center of the road.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/extreme-turns.png)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/extreme-turns.JPG)
 
 To avoid the car from being biased toward turning left or right, additional image/steering angle data was added by using OpenCV's flip method. The steering angle also had to be flipped as well
 ```python
 cv2.flip(img, 1)
 angle * -1.0
 ```
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/image-flip.png)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/image-flip.JPG)
 
 To further train the car to return to the center of the lane, I took adavantage of the left and right cameras on the car. Essentially, I treated the car's left camera as its center-facing camera and changed the steering angle by an offset. That way, if the car center camera sees a picture similar to its left camera image, it will be trained to return to the lane's center.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steer-offsets.png)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steer-offsets.JPG)
 
 For each image that goes into training the model enters an image pipeline (located in the notebook's cells `Create Generator Helper Functions`
 
 Before image preprocessing, each image starts off as a Red, Green, and Blue channeld image (160x320x3)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.png)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
 
 The image is then converted to a Hue Saturation Value (HSV) image and the Saturation channel is extracted. Exctracting just the S-channel helped the car detect the boundaries of the road greatly because it allows the edges of the road to standout while the road itself appears as a mostly flat color.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/hsv-image.png)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/hsv-image.JPG)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/only-saturation-image.png)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/only-saturation-image.JPG)
 
 By now, the shape of the image is (160x320x1), where there is only one channel and not three (3 -> 1). The model simply does not need those original spatial dimensions (160x320) even though they help us humans see what the car sees. A image size of 64x64 works well for training as this retains enough data to train (not to mention the huge amount of training time saved!). In addition to resizing the image, the model doesn't need to be trained on the sky (top of the image) nor the hood of the car (bottom of the image) so let's crop those parts.
 ```python
