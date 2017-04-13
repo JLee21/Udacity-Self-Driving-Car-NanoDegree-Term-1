@@ -71,7 +71,7 @@ The image is then converted to a Hue Saturation Value (HSV) image and the Satura
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/only-saturation-image.png)
 
-By now, the shape of the image is (160x320x1), where there is only one channel (3 -> 1). The model simply does not need those original dimensions even though they help us humans see what the car sees. A image size of 64x64 works well for training (not to mention the huge amount of training time saved!). In addition to resizing the image, the model doesn't need to be trained on the sky (top of the image) nor the hood of the car (bottom of the image) so let's crop those parts.
+By now, the shape of the image is (160x320x1), where there is only one channel and not three (3 -> 1). The model simply does not need those original spatial dimensions (160x320) even though they help us humans see what the car sees. A image size of 64x64 works well for training as this retains enough data to train (not to mention the huge amount of training time saved!). In addition to resizing the image, the model doesn't need to be trained on the sky (top of the image) nor the hood of the car (bottom of the image) so let's crop those parts.
 ```python
 rows, cols = 64, 64
 cv2.resize(img, (rows, cols), cv2.INTER_AREA)
@@ -86,6 +86,19 @@ Train and Validate Split
 A train/validate data split of 20% was implemented:
 ```
 python train_samples, validation_samples = train_test_split(lines, test_size=0.2)
+```
+
+Python Generator
+---
+A python generator was created for a couple of reasons. 
+* We don't want to load thousands of images all at once into the computer's RAM. Instead the images are loaded in small batches from a SSD (I found a SSD has about a 50% speed increase compared to a HD).
+* We can image process these small batches of images when it's needed by the model
+The generator was created in the cell block `Create Generator` and the generator is implemented in the cell block `Train, Validate, and Save Model`. In addition, a generator for the validation images was used as well.
+```python
+ model.fit_generator(generator=train_generator ... 
+```
+```python
+validation_data=validation_generator)
 ```
 
 ## Build a Deep Nerual Network
