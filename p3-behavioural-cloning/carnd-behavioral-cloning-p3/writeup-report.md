@@ -185,7 +185,9 @@ I chose a ADAM optimizerr (code cell titled `Train, Validate, and Save Model`). 
 model.compile(loss='mse', optimizer='adam')
 ```
 Much like solving a simple regression problem: 
+
 ![http://pgfplots.net/tikz/examples/regression-residuals/](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/regression-example.JPG)
+
 [image source](http://pgfplots.net/tikz/examples/regression-residuals/)
 
 the model's loss is calculated using Mean Squared Error loss. This was chosen as the model tries to *fit* not *classify* a steering angle to its input image. 
