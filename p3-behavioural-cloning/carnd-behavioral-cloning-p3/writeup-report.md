@@ -26,7 +26,7 @@ Project Outline
 #### Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
-* The main notebook - ai-model-notebook.ipynb - contains the code to create and train the model. All code referenced pertains to this notebook unless otherwise noted
+* The main notebook `ai-model-notebook.ipynb` contains the code to create and train the model. All code referenced pertains to this notebook unless otherwise noted
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup-report.md summarizing the results
