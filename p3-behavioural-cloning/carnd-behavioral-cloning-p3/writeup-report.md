@@ -21,7 +21,7 @@ Project Outline
 [image6]: ./examples/placeholder_small.png "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
-### Files Submitted
+## Files Submitted
 
 #### Submission includes all required files and can be used to run the simulator in autonomous mode
 
@@ -40,9 +40,7 @@ python drive.py model.h5
 #### Submission code is usable and readable
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
-###Model Architecture and Training Strategy
-
-####1. An appropriate model architecture has been employed
+## Model Architecture and Training Strategy
 
 My model is constructed in the cell **Construct Model** within `ai-model-notebook`.
 The model follows the following structure:
@@ -74,8 +72,15 @@ Fully Connect | Take input of the previous layer and link to 1 neuron
 Input
 ---
 
-The input of the model is a resized image from the generator. The model also crops away the top and bottom of the image -the sky and the car's hood- as these are parts of the image are unrelated to the steering angle.
-Input normalization is important for all neural networks to allow for a successful and effecient gradient descent--this model is no exception--a Lamnda layer normalizes all pixel values from a range of 0-255 to +/- 0.5
+The input of the model is a resized image from the generator. Resizing the image greatly increases training time without giving up detail for training. A few student blogs recommended 64x64 pixels (here)[http://ottonello.gitlab.io/selfdriving/nanodegree/2017/02/09/behavioral_cloning.html] and (here)[https://chatbotslife.com/using-augmentation-to-mimic-human-driving-496b569760a9]
+```python
+model.add(Cropping2D(cropping=((14,5),(0,0)), input_shape=(64, 64, 1)))
+```
+The model also crops away the top and bottom of the image -the sky and the car's hood- as these are parts of the image are unrelated to the steering angle.
+Input normalization is important for all neural networks to allow for a successful and effecient gradient descent--this model is no exception--a Lambda layer normalizes all pixel values from a range of 0-255 to +/- 0.5
+```python
+model.add(Lambda(lambda x: x / 255.0 - 0.5))
+```
 
 Activation
 ---
@@ -93,10 +98,17 @@ This is why I the depth of each of my convolution layers are 32, 64, 128. You ca
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-3.png)
 
+Fully Connected Layers
+---
+After testing various implementations of the number of fully connected layers and the number of connections each one hold, I ened up using four fully connected layers. The model concludes with a single output neruon that denotes a steering angle, as this driving challenge is a regression one, not classification. I found that the number of neurons made no significant impact on the performance of the car, although increasing the number of neurons also increased training time. A general rule of thumb is to quickly descend the number of neurons in each layer: 512 -> 100 -> 50 -> 10 -> 1
 
-####2. Attempts to reduce overfitting in the model
-
-The model contains dropout layers in order to reduce overfitting (model.py lines 21). 
+Drop Out Layers
+---
+I added two drop out layers that only drop a small percentage of the previous layers' activations.
+```python
+model.add(Dropout(0.2))
+```
+Before adding the dropout layers, I noticed the car would become 'stickier' to certain parts of the course -- as if it memorized exactly what it wanted to do. If I added too much droppage, the car seemed to be more 'slippery' in that it seemed to refuse to stick on a particular path and would drift, especially on the curves. I ended up only dropping 20% of the third convolution layer's activation and only 10% of the first fully connected layer's activations.
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 10-16). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 
