@@ -26,10 +26,11 @@ Project Outline
 #### Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
-* The main notebook `ai-model-notebook.ipynb` contains the code to create and train the model. All code referenced pertains to this notebook unless otherwise noted
-* drive.py for driving the car in autonomous mode
-* model.h5 containing a trained convolution neural network 
-* writeup-report.md summarizing the results
+* `ai-model-notebook.ipynb` the main notebook contains the code to create and train the model. All code referenced pertains to this notebook unless otherwise noted
+* `drive.py` used for driving the car in autonomous mode
+* `model.h5` containing a trained convolution neural network 
+* `video.mp4` footage of the car driving one lap autonomously
+* `writeup-report.md` summarizing the results
 
 #### To run the car autonomously
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -41,7 +42,6 @@ python drive.py model.h5
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ## Data Collection  
-
 The car records what it sees with a virtual camera at the front of the vehicle. Along with the car's corresponding steering angle, this is what the data collection consists of.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
@@ -202,4 +202,4 @@ I implemented a piece of advice from my previous project review in that the mode
 
 I found the absolute value of the training or validation mean squared error loss was not an explicit indicator that the car would drive successfully.
 
-After the car successfully drove around most of the track, I noticed trouble spots on the course: sharp turns. Although tuning parts of the model may help (Dropout, MaxPool, more/less fully connected layers, etc) I realized more training was needed just in those sharp turns. I drove/trained the car on how to approach the turns - six iterations for each turn. I also emphasized hugging the inner curve -- as human drivers, it's much more natural to turn closer to the inner curve and override the sensation of centripetal force than let the car drift to the outer curve.
+After the car successfully drove around most of the track, I noticed trouble spots on the course: sharp turns. Although tuning parts of the model may help (Dropout, MaxPool, more/less fully connected layers, etc) I realized more training was needed just in those sharp turns. I drove/trained the car on how to approach the turns - six iterations for each turn. I also emphasized hugging the inner curve. As human drivers, it's much more natural to turn closer to the inner curve and override the sensation of centripetal force than to let the car drift to the outer curve.
