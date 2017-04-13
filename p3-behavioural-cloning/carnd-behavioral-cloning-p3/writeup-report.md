@@ -3,6 +3,7 @@
 
 Overview
 ---
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/video.gif)
 
 Project Outline
 ---
@@ -53,9 +54,10 @@ I recruited a friend to drive the car around the track as close to perfection as
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/extreme-turns.png)
 
-To avoid the car from being biased toward turning left or right, additional image/steering angle data was added by using OpenCV's flip method.
+To avoid the car from being biased toward turning left or right, additional image/steering angle data was added by using OpenCV's flip method. The steering angle also had to be flipped as well
 ```python
 cv2.flip(img, 1)
+angle * -1.0
 ```
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/image-flip.png)
 
@@ -103,7 +105,7 @@ The generator was created in the cell block `Create Generator` and the generator
 ```
 During training, the model is trained on one small batch of images at a time. Here's the distribution of steering angles of five randomly chosen batches.
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/batch-distribution.png)
-Unlike the original, unprocessed distribution of steering angles as shown earlier, the distributuion of each batch better resembles a Gaussian distribution.
+Unlike the original, unprocessed distribution of steering angles as shown earlier, the distributuion of each batch better resembles a normal Gaussian distribution. This is important as this enables the car to be robust in accepting multiple images with differnt corresponding steering angles. In other words, we want the car to drive straight in the middle of the road -- most of the time -- but we also want the car to know what to do during sharp turns, gradual turns, center-of-the-lane offsets, etc.
 
 ## Build a Deep Nerual Network
 My model is constructed in the cell **Construct Model** within `ai-model-notebook`.
@@ -181,14 +183,7 @@ Model Optimizer and Loss Calculator
 I chose a ADAM optimizerr (code cell titled `Train, Validate, and Save Model`. A learning rate does not need to be implemented as this is built into the optimizer.
 
 
-
 ## Train and Validate
-Train and Validate Split
----
-A train/validate data split of 20% was implemented:
-```
-python train_samples, validation_samples = train_test_split(lines, test_size=0.2)
-```
 
 Training Strategy
 ---
@@ -197,3 +192,5 @@ I implemented a piece of advice from my previous project review in that the mode
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/model-mean-squared-error-loss.png)
 
 I found the absolute value of the training or validation mean squared error loss was not an explicit indicator that the car would drive successfully.
+
+
