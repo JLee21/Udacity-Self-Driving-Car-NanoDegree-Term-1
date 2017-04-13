@@ -26,7 +26,7 @@ Project Outline
 #### Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
-* The main notebook - ai-model-notebook.ipynb - containing the script to create and train the model
+* The main notebook - ai-model-notebook.ipynb - contains the code to create and train the model. All code referenced pertains to this notebook unless otherwise noted
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup-report.md summarizing the results
@@ -180,8 +180,15 @@ The model was trained and validated on different data sets to ensure that the mo
 
 Model Optimizer and Loss Calculator
 ---
-I chose a ADAM optimizerr (code cell titled `Train, Validate, and Save Model`. A learning rate does not need to be implemented as this is built into the optimizer.
+I chose a ADAM optimizerr (code cell titled `Train, Validate, and Save Model`). A learning rate does not need to be implemented as this is built into the optimizer. ADAM is a type of SGD that takes advantage of its previous computed gradients in order to apply wiser, subsequent gradient calculations.
+```python
+model.compile(loss='mse', optimizer='adam')
+```
+Much like solving a simple regression problem: 
+![http://pgfplots.net/tikz/examples/regression-residuals/](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/regression-example.JPG)
+[image source](http://pgfplots.net/tikz/examples/regression-residuals/)
 
+the model's loss is calculated using Mean Squared Error loss. This was chosen as the model tries to *fit* not *classify* a steering angle to its input image. 
 
 ## Train and Validate
 
