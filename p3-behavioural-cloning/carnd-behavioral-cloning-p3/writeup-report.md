@@ -155,7 +155,7 @@ The model includes Rectified Linear Unit (ReLU) Activation layers to introduce n
 Convolution / MaxPool
 ---
 [](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)
-I implemented a similar architecture to NVidia's end-to-end model. Similar to other student's architecture, [here]() and [here]() as well as NVidia's, a common theme to extract more and more feature layers with each subsequent convolutional layer. The resoning is that each convolution layer extracts higher and higher levels of abstractions from the previous convolution layer.
+I implemented a similar architecture to NVidia's end-to-end model. Similar to other student's architecture, [here]() and [here]() as well as [NVidia's](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf), a common theme to extract more and more feature layers with each subsequent convolutional layer. The resoning is that each convolution layer extracts higher and higher levels of abstractions from the previous convolution layer.
 This is why I the depth of each of my convolution layers are 32, 64, 128. You can see below that the each convolution layer get higher and higher in abstraction.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-1.png)
@@ -166,7 +166,7 @@ This is why I the depth of each of my convolution layers are 32, 64, 128. You ca
 
 Fully Connected Layers
 ---
-After testing various implementations of the number of fully connected layers and the number of connections each one hold, I ened up using four fully connected layers. The model concludes with a single output neruon that denotes a steering angle, as this driving challenge is a regression one, not classification. I found that the number of neurons made no significant impact on the performance of the car, although increasing the number of neurons also increased training time. A general rule of thumb is to quickly descend the number of neurons in each layer: 512 -> 100 -> 50 -> 10 -> 1
+After testing various implementations of the number of fully connected layers and the number of connections each one hold, I ened up using four fully connected layers. The model concludes with a single output neruon that denotes a steering angle, as this driving challenge is a regression one, not classification. I found that the number of neurons made no significant impact on the performance of the car, although increasing the number of neurons also increased training time. Ultimately, the goal is to decrease the number of neruons in each subsequent layer until the desired number is reached: 512 -> 100 -> 50 -> 10 -> 1
 
 Drop Out Layers
 ---
@@ -202,4 +202,4 @@ I implemented a piece of advice from my previous project review in that the mode
 
 I found the absolute value of the training or validation mean squared error loss was not an explicit indicator that the car would drive successfully.
 
-
+After the car successfully drove around most of the track, I noticed trouble spots on the course: sharp turns. Although tuning parts of the model may help (Dropout, MaxPool, more/less fully connected layers, etc) I realized more training was needed just in those sharp turns. I drove/trained the car on how to approach the turns - six iterations for each turn. I also emphasized hugging the inner curve -- as human drivers, it's much more natural to turn closer to the inner curve and override the sensation of centripetal force than let the car drift to the outer curve.
