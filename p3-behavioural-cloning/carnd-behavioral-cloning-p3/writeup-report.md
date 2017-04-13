@@ -4,7 +4,7 @@
 Overview
 ---
 
-Project Content
+Project Outline
 ---
 * Files Submitted 
 * Collect Driving Data
@@ -13,7 +13,6 @@ Project Content
 * Test the Model
 ---
 [//]: # (Image References)
-
 [image1]: ./examples/placeholder.png "Model Visualization"
 [image2]: ./examples/placeholder.png "Grayscaling"
 [image3]: ./examples/placeholder_small.png "Recovery Image"
