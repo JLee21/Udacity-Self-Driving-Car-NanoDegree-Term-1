@@ -19,13 +19,10 @@ The goals / steps of this project:
 [image6]: ./examples/placeholder_small.png "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 
-## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
-
 ---
-###Files Submitted & Code Quality
+### Files Submitted
 
-####1. Submission includes all required files and can be used to run the simulator in autonomous mode
+#### Submission includes all required files and can be used to run the simulator in autonomous mode
 
 My project includes the following files:
 * model.py containing the script to create and train the model
@@ -33,14 +30,13 @@ My project includes the following files:
 * model.h5 containing a trained convolution neural network 
 * writeup-report.md summarizing the results
 
-####2. Submission includes functional code
+#### To run the car autonomously
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 ```sh
 python drive.py model.h5
 ```
 
-####3. Submission code is usable and readable
-
+#### Submission code is usable and readable
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
 ###Model Architecture and Training Strategy
@@ -88,11 +84,13 @@ Convolution / MaxPool
 ---
 [](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)
 I implemented a similar architecture to NVidia's end-to-end model. Similar to other student's architecture, [here]() and [here]() as well as NVidia's, a common theme to extract more and more feature layers with each subsequent convolutional layer. The resoning is that each convolution layer extracts higher and higher levels of abstractions from the previous convolution layer.
-This is why I the depth of each of my convolution layers are 32, 64, 128.
+This is why I the depth of each of my convolution layers are 32, 64, 128. You can see below that the each convolution layer get higher and higher in abstraction.
 
-![]()
-![]()
-![]()
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-1.png)
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-2.png)
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-3.png)
 
 
 ####2. Attempts to reduce overfitting in the model
