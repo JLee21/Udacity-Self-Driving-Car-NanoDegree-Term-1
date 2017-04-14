@@ -19,10 +19,22 @@ Project Outline
 
 ## Camera Calibration
 
+The camera that is located in the front of the car needs to be undistorted. This steps invovles taking several calibartion images of a printed 2D chessboard with the same camera. The location of the calibration images used are stored in this repository's directory `cal-images`. A function from OpenCV is used to find the corners of the chessboard. 
+```python
+# Find the chessboard corners
+ret, corners = cv2.findChessboardCorners(gray, (9,6), None)
+```
+These corner vertices are compared to a plane mesh grid of points that are evenly seprated on flat plane (shown as `Mesh Grid of objpoints` below). 
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/objpoints-draw-corners.JPG)
+The OpenCV function `calibrateCamera` computes these points and outputs a corrected camera matrix `mtx` and distortion coefficients `dist`.
+```python
+# Perform camera calibration given object points and image points
+ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img_size ,None,None)
+```
 Below is an example of a distortion corrected calibration image.
 
-The location of the calibration images used are stored in this repository's directory `cal-images`
- ![]()
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/cam-cal-undistort.JPG)
+
 
 ## Image Pipeline
 
@@ -41,6 +53,7 @@ The code can be found in the cell block titled ` ` as well as directly below
 ```python 
 
 ```
+
 
 ### Polynomial Fit of Lane Lines
 
