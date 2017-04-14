@@ -1,4 +1,4 @@
-## Project: Implement Behaviorial Cloning in a Car Simulator
+## Project: Implement Behavioral Cloning in a Car Simulator
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
 Overview
@@ -23,7 +23,7 @@ Project Outline
 * `cal-images` - a directory of calibration images used to undistort the images taken by the camera
 
 ## Camera Calibration
-The camera that is located in the front of the car needs to be undistorted, that is, to undo distortion of the image caused by the bending of the light as it passes the camera's lenses. This steps involves taking several calibration images of a printed 2D chessboard with the same camera that is on the vehicle. The location of the calibration images used are stored in this repository's directory `cal-images`. A function from OpenCV is used to find the corners of the chessboard. 
+The camera that is located in the front of the car needs to be undistorted, that is, to undo distortion of the image caused by the bending of the light as it passes the camera's lenses. This step involves taking several calibration images of a printed 2D chessboard with the same camera that is on the vehicle. The location of the calibration images used are stored in this repository's directory `cal-images`. A function from OpenCV is used to find the corners of the chessboard. 
 ```python
 # Find the chessboard corners
 ret, corners = cv2.findChessboardCorners(gray, (9,6), None)
@@ -45,34 +45,34 @@ Below is an example of a distortion corrected calibration image.
 ## Image Pipeline
 The cell block titled `Image Pipeline Functions` holds the functions that are included in the image processing pipeline.
 ### Distortion Correction
-Every image must be un-distortion step as the preceding steps require no distortion. In order to undistort each image the following code is used:
+Distortion must be removed from every image as the preceding steps require no distortion. In order to undistort each image the following code is used:
 ```python
 cv2.undistort(img, mtx, dist, None, mtx)
 ```
-Below is an example of distortion corrected image that is part of the driving video.
+Below is an example of a distortion corrected image that is part of the driving video.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/undistort-road-image.JPG)
 
 ### Color Transforms/Gradients
-One of the more challenging aspects of this challenge was selecting the image's color channel thresholds in order to find the pixels in the image that represent the lane lines. Below I discuss my implementation in finding these lane line pixels and I have divided the approach into the topics: `Hue Lightness Saturation Channels` and `Red Green Blue Channels`. I found that HSL and RGB segmentation compliment each other very well in that if a HSL image did not find the lane line, the RGB image did, and vice versa.
+One of the more challenging aspects of this project was selecting the image's color channel thresholds in order to find the pixels in the image that represent the lane lines. Below I discuss my technique for finding these lane line pixels and I have divided the approach into the topics: `Hue Lightness Saturation Channels` and `Red Green Blue Channels`. I found that HLS and RGB segmentation are complimentary, since HLS shows lane lines when RGB falls short, and vice versa.
 
 #### Hue Lightness Saturation Channels
-I converted each image to an HLS image and then cycled through various thresholds of each channel's pixel value. I selected the L-channel pixel threshold to be `220-255` and the S-channel pixel threshold to be `200-255`. The H-channel appeared to not be useful in finding the lane lines.
+I converted each image to an HLS image and then cycled through various thresholds of each channel's pixel value. I selected the L-channel pixel threshold to be `220-255` and the S-channel pixel threshold to be `200-255`. The H-channel appeared unuseful in finding the lane lines.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/hsl-thresh.JPG)
 
-I then applied a Sobel gradient to the S-channel and along with adding the L-channel pixels to make a `Combined Binary` binary mask shown below
+I then applied a Sobel gradient to the S-channel, along with adding the L-channel pixels to make the `Combined Binary` mask shown below
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/hsv-combined-binary.JPG)
 
-The usage of S and L channel binary mask can be found in cell block `Image Pipeline` lines `5-16` and `28-33`
+The usage of the S and L channel binary mask can be found in cell block `Image Pipeline` lines `5-16` and `28-33`
 
 #### Red Green Blue Channels
-Much like the cycling of pixel thresholds I performed for the HLS image, I performed the same but with RGB channels. I selected the R-channel pixel threshold to be `245-255`, the G-channel pixel threshold to be `215-255`, and the B-channel pixel threshold to be `215-255`.
+I performed the same cycling of pixel thresholds for the RGB channels as I did for HLS. I selected the R-channel pixel threshold to be `245-255`, the G-channel pixel threshold to be `215-255`, and the B-channel pixel threshold to be `215-255`.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/rgb-thresh.JPG)
 
-The usage of RGB binary mask can be found in cell block `Image Pipeline` lines `17-24` and `30-32`.
+The usage of the RGB binary mask can be found in cell block `Image Pipeline` lines `17-24` and `30-32`.
 
 ### Perspective Transform
 In order to compute a second order polynomial fit of the left and right lane lines, a birds-eye-view of the lane must be made. This is completed by using the OpenCV's function `applyPerspective`. The source points `src` and destination points `dst` are hard-coded and used throughout the entirety of the video (cell block `Image Pipeline Functions`, lines `74-84`). These four vertices instruct the function how much to warp an image so that it appears as if we're looking directly down on it.
@@ -83,16 +83,16 @@ M = cv2.getPerspectiveTransform(src, dst)
 # Unwarp an image using the perspective(img, M, img_size, flags=cv2.INTER_LINEAR)
 cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)
 ```
-The second and forth column in the image grid below show the output of applying a perspective transform.
+The second and fourth column in the image grid below show the output of applying a perspective transform.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/perspectives.JPG)
 
 The function that is responsible for performing this perspective transform on all images is located in cell block `Image Pipeline Functions`, lines `86-92`.
 
 ### Polynomial Fit of Lane Lines
-In order to perform a polynomial fit of the lane line pixels, an binary image mask is used to gather pixel indices of all non-zero pixel values for each lane line. This is performed using a Sliding Window approach, where a defined window or rectangle slides around the image 'looking' for pixel values that are non-zero within its boundary. The window precedes to follow the lane's pixels in the image. 
+In order to perform a polynomial fit of the lane line pixels, an binary image mask is used to gather pixel indices of all non-zero pixel values for each lane line. This is performed using a Sliding Window approach, where a defined window or rectangle slides around the image 'looking' for pixel values that are non-zero within its boundary. The window proceeds to follow the lane's pixels in the image. 
 
-After finding the left and right pixels' indices `leftx, lefty, rightx, righty` that denote the presence of a lane line, the numpy function `polyfit` is used to fit a second-order polynomial function to those respective lane line pixels.
+After finding the left and right pixels' indices `leftx, lefty, rightx, righty` that denote the presence of a lane line, the NumPy function `polyfit` is used to fit a second-order polynomial function to those respective lane line pixels.
 ```python
 np.polyfit(lefty, leftx, 2)
 np.polyfit(righty, rightx, 2)
@@ -118,7 +118,7 @@ In this case, the derivative is found at the bottom of the image where the fitte
 ym_per_pix = 30/720 # meters per pixel in y dimension
 xm_per_pix = 3.7/700 # meters per pixel in x dimension
 ```
-Since two different radii will be calculated, one for each lane line, the average of each radius will be taken and displayed.
+Since two different radii will be calculated (one for each lane line), the average of each radius will be taken and displayed.
 The code for calculating the radius of curvature can be found in cell block `Draw Lane and Stats Function`, lines `159-183`.
 
 ### Vehicle's Center Offset
@@ -127,14 +127,14 @@ In order to calculate the vehicle's lateral offset from the center of its lane, 
 The code that calculates the vehicle's center offset is located in cell block `Draw Lane and Stats Function`, lines `185-191`.
 
 ### Final Plot of Lane Space and Statistics
-Below are two examples where a projected lane polygon represents the drivable portion of the car's lane as well as the lane's estimated radius of curvature and the vehicle's lateral offset to the lane's center.
+Below are two examples where a projected lane polygon represents the drivable portion of the car's lane as well as the lane's estimated radius of curvature and the vehicle's lateral offset from the lane's center.
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/final-output-1.JPG)
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/final-output-2.JPG)
 
 ## Video Pipeline
-The final video submission, `video.mp4`, was created using a python module `MoviePy`. The code below (cell block `Full Test Clip - Used for Project Submission`) takes the function `apply_lane_find` (cell block `Full Image Pipeline`) and applies it to each of the video's image frame.
+The final video submission, `video.mp4`, was created using a python module `MoviePy`. The code below (cell block `Full Test Clip - Used for Project Submission`) takes the function `apply_lane_find` (cell block `Full Image Pipeline`) and applies it to each of the video's image frames.
 ```python
 from moviepy.editor import VideoFileClip
 clip1 = VideoFileClip(project-video.mp4')
@@ -147,13 +147,13 @@ Although executing the image pipeline on a handful of test images to find the la
 
 ![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/catistrophic-failure-2.JPG)
 
-The blue color on the road represents what the algorithm thought was the right lane line. After discovering this, I proceeded to cycle through the HSL and RGB channel values in order to better filter false positives.
+The blue color on the road represents what the algorithm thought was the right lane line. After discovering this, I proceeded to cycle through the HLS and RGB channel values in order to better filter false positives.
 
 ### Lane Line Class
-As I completed the full image pipeline, I noticed that the lane coloring was very jittery. Also the radius of curvature and vehicle offset values were flickering at an unfriendly rate. As suggested by the Udacity course, I implemented a `Line Class` to save historic values of each video's frame. The code of this class can be found in cell block `Create Line Class`. The Line class is responsible for saving historic values of the video's frame where, for example, the polynomial coefficients are read in and the the output is an updated average of those polynomial coefficients. A similar approach was made for the vehicle's offset value and the radius of curvature. 
+As I completed the full image pipeline, I noticed that the lane coloring was very jittery. Also the radius of curvature and vehicle offset values changed so rapidly that they were hardly decipherable. As suggested by the Udacity course, I implemented a `Line Class` to save historic values of each video's frame. The code of this class can be found in cell block `Create Line Class`. The Line class is responsible for saving historic values of the video's frame where, for example, the polynomial coefficients are read in and the output is an updated average of those polynomial coefficients. A similar approach was made for the vehicle's offset value and the radius of curvature. 
 
 ### Quick Lane Search
-Once I implemented a basic Sliding Window search in order to find the left and right lane line image pixels, I added a Quick Lane Search where I take advantage of the previously found lane line polynomial fit. The code for this can be found in cell block `Draw Lane and Stats Function`, lines (7-53).
+Once I implemented a basic Sliding Window search in order to find the left and right lane line image pixels, I added a Quick Lane Search where I took advantage of the previously found lane line polynomial fit. The code for this can be found in cell block `Draw Lane and Stats Function`, lines (7-53).
 
 ### Future Improvements
-I performed a lot of color channel tuning in order to successfully find the lane for 50 seconds worth of driving footage. I believe that a more robust approach would be to teach an AI model to find lane lines. Perhaps, the AI model would be able to tune the color channels automatically in order to produce a binary mask that it thinks most resembles the lane lines. In addition, the AI model could be trained on what a lane line is using a Generative Adversarial Network as explained in Comma.ai's [approach](https://github.com/commaai/research).
+I performed a considerable amount of color channel tuning in order to successfully locate the lane for 50 seconds worth of driving footage. I believe that a more efficient approach would incorporate instruction of an AI model to find lane lines. The AI model could be trained to tune the color channels automatically in order to produce a binary mask that it thinks most resembles the lane lines. The AI model could also be trained on what a lane line is using a Generative Adversarial Network as explained in comma.ai's [approach](https://github.com/commaai/research).
