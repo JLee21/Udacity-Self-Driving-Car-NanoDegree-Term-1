@@ -14,25 +14,69 @@ Project Outline
 
 ## Files Submitted
 * `advanced-lane-finding.ipynb` - the notebook contains all of the code used for advanced lane finding. All code referenced pertains to this notebook unless otherwise noted
-* `example output images` - the directory 
-* ``
-* ``
-* ``
+* `write-up-images` - this directory contains all of the example output images used in this writeup
+* `project-video.mp4` - final output video showcasing advanced lane finding techniques
 
 ## Camera Calibration
 
-### Compute Camera Matrix and Distortion Cooefficients
 Below is an example of a distortion corrected calibration image.
 
 The location of the calibration images used are stored in this repository's directory `cal-images`
  ![]()
 
 ## Image Pipeline
+
+### Distortion Correction
 Every image must undergo a undistortion step as preceding steps require or assume no distortion from the inherent nature of the camera lenses is induced. In order to undistort each image the following code is used (cell block ` `)
 
 Below is an example of distorion corrected image that is part of the driving video.
 
 ![]()
 
+### Color Transforms - Gradients
+
+### Perspective Transorm
+In order to compute a second order polynomial fit of the left and right lane lines, a birds-eye-view of the lane must be made. This is completed by using the OpenCV's funciton apply perspective. The source points `src` and destination points `dst` are hard-coded and used throughtout the entirety of the video. These four vertices instruct the function how much to warp an image so that it appears as if we're looking directly down on it.
+The code can be found in the cell block titled ` ` as well as directly below
+```python 
+
+```
+
+### Polynomial Fit of Lane Lines
+
+After finding the left and right pixels that denote the prescence of a line the numpy function `polyfit` is used to fit a second-order polynomial function to those respective lane line pixels.
+```python
+np.polyfit(lefty, leftx, 2)
+np.polyfit(righty, rightx, 2)
+```
+
+Below are a few examples where the left and right lane line pixels are colored red and blue, respectively. The yellow lines are the second-order polynomial fit. When fitting the polynomial function, only the respective lane-colored pixels are used.
+
+![]()
+
+![]()
+
+### Radious of Curvature
+
+
+### Vehicle's Lane Position
+
+Like in the previous section `Radius of Curvature`, the pixel dimension of the image was converted to meters.
+
+### Final Plot of Lane Space and Statistics
+
+![]()
+
+![]()
+
 ## Video Pipeline
+
+The final video submission, `video.mp4`, was created using a python module `MoviePy`. The code below (cell block `Full Test Clip - Used for Project Submission`) takes the function `apply_lane_find` (cell block `Full Image Pipeline`) and applies it to each of the video's image frame.
+
+```python
+from moviepy.editor import VideoFileClip
+clip1 = VideoFileClip(project-video.mp4')
+proj_clip = clip1.fl_image(apply_lane_find)
+```
+
 ## Discussion
