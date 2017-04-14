@@ -3,6 +3,9 @@
 
 Overview
 ---
+![]()
+
+The goal of this project is to classify the driveable area of a car's lane and calculate the estimated lane's radius of curvature and the vehicle's lateral offset from the lane's center.
 
 Project Outline
 ---
@@ -148,3 +151,6 @@ As I completed the full image pipeline, I noticed that the lane coloring was ver
 
 ### Quick Lane Search
 Once I implemented a basic Sliding Widnow search in order to find the left and right lane line image pixels, I added a Quick Lane Search where I take advantage of the previosuly found lane line polynomial fit. The code for this can be found in cell block `Draw Lane and Stats Fucntion`, lines (7-53).
+
+### Furture Improvements
+I performed a lot of color channel tuning in order to successfully find the lane for 50 seconds worth of driving footage. I believe that a more robust approach would be to teach an AI model to find lane lines. Perhaps, the AI model would be able to tune the color channels automatically in order to produce a binary mask that it thinks most resembles the lane lines. In addition, the AI model could be trained  on what a lane line is using a Generative Adverarial Network as explained in Comma.ai's [approach](https://github.com/commaai/research).
