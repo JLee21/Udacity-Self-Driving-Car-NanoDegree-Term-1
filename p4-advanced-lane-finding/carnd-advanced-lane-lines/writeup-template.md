@@ -37,46 +37,90 @@ Below is an example of a distortion corrected calibration image.
 
 
 ## Image Pipeline
-
+The cell block titled `Image Pipeline Functions` holds the functions that are included in the image processing pipeline.
 ### Distortion Correction
-Every image must undergo a undistortion step as preceding steps require or assume no distortion from the inherent nature of the camera lenses is induced. In order to undistort each image the following code is used (cell block ` `)
-
+Every image must undergo a undistortion step as preceding steps require or assume no distortion from the inherent nature of the camera lenses is induced. In order to undistort each image the following code is used:
+```python
+cv2.undistort(img, mtx, dist, None, mtx)
+```
 Below is an example of distorion corrected image that is part of the driving video.
 
-![]()
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/undistort-road-image.JPG)
 
 ### Color Transforms - Gradients
+One of the more challenging aspects of this challenge was tuning color channel thresholds of the driving image in order to find the pixels in the image that represent the lane lines. Below I discuss my implmentation in finding these lane line pixels and I have divided the approach into the topics: `Hue Lightness Staturation Channels` and `Red Green Blue Channels`.
+
+#### Hue Lightness Staturation Channels
+I converted each image to HLS image and then cycled through various thresholds of each channel's pixel value. I selected the L-channel pixel threshold to be `220-255` and the S-channel pixel threshold to be `200-255`
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/hsl-thresh.JPG)
+
+I then applied a Sobel gradient to the S-channel and along with adding the L-channel pixels to make a `Combined Binary` binary mask shown below
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/hsv-combined-binary.JPG)
+
+The usage of S and L channel binary mask can be found in cell block `Image Pipeline` lines `5-16` and `28-33`
+
+#### Red Green Blue Channels
+Much like the cycling of pixel thresholds I performed for the HLS image, I performed the same but with RGB channels. I selected the R-channel pixel threshold to be `245-255`, the G-channel pixel threshold to be `215-255`, and the B-channel pixel threshold to be `215-255`.
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/rgb-thresh.JPG)
+
+The usage of RGB binary mask can be found in cell block `Image Pipeline` lines `17-24` and `30-32`.
 
 ### Perspective Transorm
-In order to compute a second order polynomial fit of the left and right lane lines, a birds-eye-view of the lane must be made. This is completed by using the OpenCV's funciton apply perspective. The source points `src` and destination points `dst` are hard-coded and used throughtout the entirety of the video. These four vertices instruct the function how much to warp an image so that it appears as if we're looking directly down on it.
-The code can be found in the cell block titled ` ` as well as directly below
+In order to compute a second order polynomial fit of the left and right lane lines, a birds-eye-view of the lane must be made. This is completed by using the OpenCV's funciton apply perspective. The source points `src` and destination points `dst` are hard-coded and used throughtout the entirety of the video (cell block `Image Pipeline Functions`, lines `74-84`). These four vertices instruct the function how much to warp an image so that it appears as if we're looking directly down on it.
+The OpenCV function responsible for a perspective transform follows:
 ```python 
-
+# Compute the perspective transform, M, given source and destination points
+M = cv2.getPerspectiveTransform(src, dst)
+# Unwarp an image using the perspective(img, M, img_size, flags=cv2.INTER_LINEAR)
+cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)
 ```
+The second and forth column in the image grid below show the output of applying a perspective transform
 
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/perspectives.JPG)
+
+The function that is responsible for performing this perspective transform for all images is located in cell block `Image Pipeline Functions`, lines `86-92`.
 
 ### Polynomial Fit of Lane Lines
+In order to perform a polynomial fit of the lane line pixels, an binary image mask is used to gather all indices of all non-zero pixel values for each lane line. This is performed using a Sliding Window approach, where a defined window slides around the image 'looking' for pixel values that are non-zero within its boundary. The window precedes to follow the lane pixels in the image. 
 
-After finding the left and right pixels that denote the prescence of a line the numpy function `polyfit` is used to fit a second-order polynomial function to those respective lane line pixels.
+After finding the left and right pixels' indices `leftx, lefty, rightx, righty` that denote the prescence of a line the numpy function `polyfit` is used to fit a second-order polynomial function to those respective lane line pixels.
 ```python
 np.polyfit(lefty, leftx, 2)
 np.polyfit(righty, rightx, 2)
 ```
-
 Below are a few examples where the left and right lane line pixels are colored red and blue, respectively. The yellow lines are the second-order polynomial fit. When fitting the polynomial function, only the respective lane-colored pixels are used.
 
-![]()
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/lane-line-fit-1.JPG)
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/lane-line-fit-2.JPG)
+
+The code for the Sliding Window search can be found in cell block `Draw Lane and Stats Function`, lines `7-136`.
+
+### Radius of Curvature
+Now that the a second order polynomial line has been fit to both the left and right lane lines, the lane's radius of curvature can be found using the following equation.
 
 ![]()
+[*image source](http://www.intmath.com/applications-differentiation/8-radius-curvature.php)
 
-### Radious of Curvature
-
+In this case, the derivative is found at the bottom of the image (y=720) as this is where the front of the car lies. But before this can be calculated, the pixel space need to be converted to meters where 720 pixels in the y-direction represents 30 meters and 700 pixels in the x-direction represents 3.7 meters.
+```python
+# Define conversions in x and y from pixels space to meters
+ym_per_pix = 30/720 # meters per pixel in y dimension
+xm_per_pix = 3.7/700 # meters per pixel in x dimension
+```
+Since two differnt radii will be calculated, one for each lane line, the average of each radius will be taken and dispalyed.
+The code for calculating the radius of curvature can be found in cell block `Draw Lane and Stats Function`, lines `159-183`.
 
 ### Vehicle's Lane Position
-
-Like in the previous section `Radius of Curvature`, the pixel dimension of the image was converted to meters.
+Like in the previous section `Radius of Curvature`, the pixel dimension of the image was converted to meters. 
+In order to calculate the vehicle's lateral offset from the center of its lane, two saved values are used from the Sliding Window serach. Whenever a sliding window serach begins, the x-position of each lane line is saved as `base_x`. The average of these x-positions and is compared to the center of the image as the car's camera is laterally centered.
+The code that calculates the vehicle's center offset is located in cell block `Draw Lane and Stats Function`, lines `185-191`.
 
 ### Final Plot of Lane Space and Statistics
+Below are two examples where a projected lane polygon represents the driveable portion of the car's lane as well as the lane's estimated radius of curvature and the vehicle's lateral offset to the lane's center.
 
 ![]()
 
