@@ -103,6 +103,7 @@ The code for the Sliding Window search can be found in cell block `Draw Lane and
 Now that the a second order polynomial line has been fit to both the left and right lane lines, the lane's radius of curvature can be found using the following equation.
 
 ![]()
+
 [*image source](http://www.intmath.com/applications-differentiation/8-radius-curvature.php)
 
 In this case, the derivative is found at the bottom of the image (y=720) as this is where the front of the car lies. But before this can be calculated, the pixel space need to be converted to meters where 720 pixels in the y-direction represents 30 meters and 700 pixels in the x-direction represents 3.7 meters.
@@ -122,14 +123,12 @@ The code that calculates the vehicle's center offset is located in cell block `D
 ### Final Plot of Lane Space and Statistics
 Below are two examples where a projected lane polygon represents the driveable portion of the car's lane as well as the lane's estimated radius of curvature and the vehicle's lateral offset to the lane's center.
 
-![]()
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/final-output-1.JPG)
 
-![]()
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/final-output-2.JPG)
 
 ## Video Pipeline
-
 The final video submission, `video.mp4`, was created using a python module `MoviePy`. The code below (cell block `Full Test Clip - Used for Project Submission`) takes the function `apply_lane_find` (cell block `Full Image Pipeline`) and applies it to each of the video's image frame.
-
 ```python
 from moviepy.editor import VideoFileClip
 clip1 = VideoFileClip(project-video.mp4')
@@ -137,3 +136,15 @@ proj_clip = clip1.fl_image(apply_lane_find)
 ```
 
 ## Discussion
+### Catastrophic Failure
+Altough executing the image pipeline on a handful of test images to find the lane line pixels can be helpful, I found that there still were a few frames in the video where the calculated lane space had a catisphrophic failure. In particular, the shadows cast by the road's adjacent tree created extra noise in such a fashion that the sliding widnow search followed the brigh splotches of sunlight instead of the lane line as shown below.
+
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/catistrophic-failure-2.JPG)
+
+The blue color on the road represents what the algorithm thought was the right lane line. After discovering this, I proceded to cycle through the HSL and RGB channel values in order to better filter false positives.
+
+### Lane Line Class
+As I completed the full image pipeline, I noticed that the lane coloring was very jittery along with the values of the radius of curvature and vehicle offset flickering at an unfriendly rate. As suggested by the Udacity course, I implemented a `Line Class` to save historic values of each video's frame. The code of this class can be found in cell block `Create Line Class`. The Line class is responsible for saving historic values of the video's frame where, for example, the polynomial coefficients are read in and the the output is an updated average. A similar approach was made for the vehicle's offset value and the radius of curvature. 
+
+### Quick Lane Search
+Once I implemented a basic Sliding Widnow search in order to find the left and right lane line image pixels, I added a Quick Lane Search where I take advantage of the previosuly found lane line polynomial fit. The code for this can be found in cell block `Draw Lane and Stats Fucntion`, lines (7-53).
