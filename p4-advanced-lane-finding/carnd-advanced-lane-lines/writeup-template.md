@@ -3,9 +3,9 @@
 
 Overview
 ---
-![]()
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/video-gif.gif)
 
-The goal of this project is to classify the driveable area of a car's lane and calculate the estimated lane's radius of curvature and the vehicle's lateral offset from the lane's center.
+The goal of this project is to classify the driveable area of a car's lane and to calculate the estimated lane's radius of curvature and the vehicle's lateral offset from the lane's center.
 
 Project Outline
 ---
@@ -21,7 +21,6 @@ Project Outline
 * `project-video.mp4` - final output video showcasing advanced lane finding techniques
 
 ## Camera Calibration
-
 The camera that is located in the front of the car needs to be undistorted. This steps invovles taking several calibartion images of a printed 2D chessboard with the same camera. The location of the calibration images used are stored in this repository's directory `cal-images`. A function from OpenCV is used to find the corners of the chessboard. 
 ```python
 # Find the chessboard corners
