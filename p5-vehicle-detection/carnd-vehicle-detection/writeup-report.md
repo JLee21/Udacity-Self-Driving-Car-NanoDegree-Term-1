@@ -3,6 +3,8 @@
 
 Overview
 ---
+![gif]()
+
 The goal of this project is to detect and track vehicles on a road using a combination of machine learning and computer vision techniques.
 
 Project Outline
@@ -31,6 +33,7 @@ In order to help distinguis a group of pixel values that represent a car vesus t
 
 ![]()
 
+I chose the YCrCb image space since this space proved best among other image spaces when testing. From the graph above, the model takes advantage of the spread of values in the `Y` or luminance channel as well as the tight luminance groupings; the black car's luminance values are grouped low while the white car's values are grouped high on the specturm. Additionally, the roadside vegetation green colors and the yellow lane lines, for example, are respectively grouped together.
 I took the YCrCb channel values and calculated the Histogram of Orientated Gradients (HOG) for each channel. The purpose of this comes from the utility of HOG in determining an object within an image. HOG groups pixels into cells `pix_per_cell` and then each cell into blocks `cell_per_block`. The gradient of the given pixel values are calculated within each cell and the gradient is grouped into `orient` number of bins when taking the histogram.
 I found the following values to be fine enough to reliably detect cars and the absence of cars from test images.
 
@@ -76,6 +79,19 @@ gamma | `0.0001`
 
 
 ## Sliding Window Search
+In order to determine if a vehicle is present in an image, a Sliding Window Search technique was used. Rather than searching the entire image at once for the prescense of a vehicle, a computaionally costly step, a small, fixed-sized window slides across the image extracting the pixel values. Furthermore, three different window scales were used and each window scale only searched parts of the image, as shown below:
+
+![window scale]()
+
+The image below helps illustrate a window sliding across a subsection of the original image where each grid color represents a different window scale and corresponding image subsection.
+
+![exampel grid search]()
+
+As a window slides ove its grid space, it extracts the feature vector that correspond to within the window's boundaries. To reiterate the feature vector, the composition of the feature vector consits of the RGB pixel values, the RGB histogram values, and the HOG output. In particular, to help expedite the HOG implementation, the HOG output is performed only once for each image. The sliding window then subsamples parts of the whole image HOG output as it traverses its grid space.
+
+Once the feature vector is extracted, the SVM model tests if there is a vehicle. If the model predicts a vehicle, that window space is added to a heatmap and a acculmatliong of positive vehicle detections begins to form as shown below:
+
+![]()
 
 
 ## Video Implementation
