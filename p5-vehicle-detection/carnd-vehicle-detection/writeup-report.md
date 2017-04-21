@@ -52,7 +52,28 @@ In addition to collecting HOB values as part of the feature vector, the RGB pixe
 
 ![rgb-image-space]()
 
+Collecting the RGB pixel values is implementing in cell block `Functions`, lines `21-26` and the RGB histogram values are shown in lines `28-38`.
+
 ### Support Vector Machine Model
+As mentioned in the section directly before, a feature vector is collected from each sampling of a test-image. To reiterate, this feature vector contains the values of the HOG output, RGB pixel values, and the histogram output of the RGB values. The length of this vector is 4140. A Support Vector Machine model was chosen as this type of model is well suited for this type of car/not-car classification challenge since a SVM creates the starkest decision boundary within a reasonable training time of 8 seconds over two thousand images.
+
+The training data was a collection of car and non-car images, about one thousand for each.
+
+![]()
+
+The feature vector is exctracted from each of the training/test images and a Standard Scaler was applied. In order to efficeintly train the SVM model, this sacler functions alters the columns of each feature vector so that the column-wise mean is zero with a unit variance. The code for scaling the trainging/test images is in cell block `Create Model`, lines `31-34`.
+
+Given that SVM models have numerous hyperparameters to select, the Python library Sklearn's GridSearchCV was used to test out the following combination of paramters.
+
+![svm-params]()
+
+The best paramters in regards to the best test score and training time follows:
+Paramter | Value
+---------|------
+Kernel | `RBF`
+C | `10`
+gamma | `0.0001`
+
 
 ## Sliding Window Search
 
