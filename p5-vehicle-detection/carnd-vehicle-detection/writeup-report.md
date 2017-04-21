@@ -71,6 +71,7 @@ Given that SVM models have numerous hyperparameters to select, the Python librar
 ![svm-params](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/svm-params.JPG)
 
 The best paramters in regards to the best test score and training time follows:
+
 Paramter | Value
 ---------|------
 Kernel | `RBF`
