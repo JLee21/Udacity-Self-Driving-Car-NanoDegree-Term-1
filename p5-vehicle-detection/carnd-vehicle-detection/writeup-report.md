@@ -99,8 +99,23 @@ Once the feature vector is extracted, the SVM model tests if there is a vehicle.
 
 The code for calling multiple featuve vector extractions with various windows sized can be found in code block `Heatmaps` in the function `heatmap`. The feature vector extraction takes place in code block `HOG/Pixel Subsamplilng Function` in the function `find_cars`.
 
-## Video Implementation
+### Pipeline Optimizations
+In order to filter out false positive vehicle detections, a threshold was applied to each heatmap. This threshold dropped parts of the produced heatmap that accrued only one positive vehicle detection. The implmentation is located in cell block `Pipeline Helper Functions`, lines `1-4` and is called from cell block `Heatmaps`, lines `21-22`.
 
+I noticed a *Bermuda Triangle* of loss vehicle detections at a medium range distance within the driving footage. As a vehilce would pass about 30-50m ahead, its detection would slowly drop. I implemented a more spatially narrow, small-scaled window serach in this area as shown as a red grid below:
+
+![subsample grid space]()
+
+## Video Implementation
+A vehicle tracking class `VehicleTracker` was created to organize the all the functions needed in the processing pipeline. The class is created in cell block `Create Vehicle Tracker Class`. At a basic level, a single class is created to handle each image frame that is supplied from a driving video. The image is passed through processing functions that extract any and all feature vectors from the image and applies the findings to a heatmap. As heatmaps are collected from each image, the heatmap is averaged over the last 20 stored heatmaps. This not only produced smoother heatmap drawings and less jittery bounding boxes, but it also helped ignore single vehilce detections by relying on a concentration of detections. I chose to store the last 20 heatmaps because this retained enough historic detections from surrounding vehicles so as to not miss (low frame count) or lag fast moving vehilces (high frame count).a
+
+![avg heatmaps]()
+
+In order to group a concentration of vehicle detections into a single bounding box, SciPy's `label()` function was used as this helped determine the boundaries of a collection of pixels as shown below:
+
+![label-examle]()
+
+The code for heatmap labeling is located in cell block `Create Vehicle Tracker Class`, lines `26-27`.
 
 ## Discussion
 
