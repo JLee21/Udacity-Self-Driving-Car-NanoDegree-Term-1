@@ -7,7 +7,7 @@ Overview
 
 The goal of this project is to detect and track vehicles on a road using a combination of machine learning and computer vision techniques.
 
-Project Outline
+Report Outline
 ---
 * Files Submitted
 * Histogram of Oriented Gradients (HOG)
@@ -87,12 +87,17 @@ The image below helps illustrate a window sliding across a subsection of the ori
 
 ![exampel grid search]()
 
+The scaling of the window was selected based on various testing. I found that small window scales (less than 0.7) produced spurious false positives while large window scales (more than 1.2) appeared to overwhelm the overall vehicle detection space by creating large overlaps into non-vehicle space.
+
 As a window slides ove its grid space, it extracts the feature vector that correspond to within the window's boundaries. To reiterate the feature vector, the composition of the feature vector consits of the RGB pixel values, the RGB histogram values, and the HOG output. In particular, to help expedite the HOG implementation, the HOG output is performed only once for each image. The sliding window then subsamples parts of the whole image HOG output as it traverses its grid space.
 
-Once the feature vector is extracted, the SVM model tests if there is a vehicle. If the model predicts a vehicle, that window space is added to a heatmap and a acculmatliong of positive vehicle detections begins to form as shown below:
+An important paramter selection was how much the window slides across the image everytime it peforms a new feature vector extraction. This value was determined empirically to be 32 pixels. If the window traversed just 16 pixels, the overall speed of the feature vector extraction was reduced considerably without any noticible imporvement in accurate vehicle detections. If the window travserved 64 pixels, the generated heatmap appeared to be too sparse and at times intepreted a sinble vehilce as two or three spearate vehicles.
+
+Once the feature vector is extracted, the SVM model tests if there is a vehicle. If the model predicts a vehicle, that window space is added to a heatmap and an accumulation of positive vehicle detections begins to form as shown below:
 
 ![]()
 
+The code for calling multiple featuve vector extractions with various windows sized can be found in code block `Heatmaps` in the function `heatmap`. The feature vector extraction takes place in code block `HOG/Pixel Subsamplilng Function` in the function `find_cars`.
 
 ## Video Implementation
 
