@@ -7,15 +7,63 @@ The goal of this project is to detect and track vehicles on a road using a combi
 
 Project Outline
 ---
-* Files Submitted 
-
-
-
-
-##Writeup Template
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
+* Files Submitted
+* Histogram of Oriented Gradients (HOG)
+* Sliding Window Search
+* Video Implementation
+* Discussion
 ---
+
+## Files Submitted
+* `vehilce-detection.ipnb` - the notebook contains all of the code used for vehicle detection. All code referenced pertains to this notebook
+* `output-images` -  a directory that holds all supporting images used in this writeup-report
+* `video.mp4` - the final output video displaying the use of vehicle detection
+* `writeup-report.md` - a markdown report outling and justifying all rubric points of the project.
+
+## Histogram of Oriented Gradients (HOG)
+This section explores what features were selected and why as well as what machine learning model was ultimately used for vehicle detection.
+### Feature Vector Selection
+By taking a look at sample test image, we can easily pick out the two cars, however, the algorithm only 'sees' pixel values. 
+
+![test-image]()
+
+In order to help distinguis a group of pixel values that represent a car vesus those that denotes a tree, for example, the image space has been seperated into YCrCb values, shown below.
+
+![]()
+
+I took the YCrCb channel values and calculated the Histogram of Orientated Gradients (HOG) for each channel. The purpose of this comes from the utility of HOG in determining an object within an image. HOG groups pixels into cells `pix_per_cell` and then each cell into blocks `cell_per_block`. The gradient of the given pixel values are calculated within each cell and the gradient is grouped into `orient` number of bins when taking the histogram.
+I found the following values to be fine enough to reliably detect cars and the absence of cars from test images.
+
+HOG Parameter | Value
+--------------|-------
+`pix_per_cell`| 16
+`cell_per_block`|2
+`orient`        |9
+
+The image grid below shows the contrasts of a car that has gone under HOG versus an image that does not have a car. The values I chose for the HOG function reliably highlight the signatures of a car such as where the hood of the car begins or the stark contrast between the ground and the bottom of the car. When compared to the HOG output of a non-car image, it is clear that the HOG parameters are able to grasp the overall shape of the car and even the stark change in gradient from the car's taillight or license plate. A non-car HOG output may show edges, however, it does not contain or exhibit the overall rectangular shape of the car.
+
+![]()
+
+The code for implementing HOG is shown in cell block `Functions`, lines `1-19`.
+
+In addition to collecting HOB values as part of the feature vector, the RGB pixel values of an image are added in two ways: by collecting the pixel values of an image and concatnecting them to the feature vector and also collecting the histogram of each RGB channel and concatenacting those values to the feature vector. When looking at the RGB color space for a given test image, the color of the cars tend to be vibrant colors when contrasted with the surround road, scenary, etc.
+
+![test-image]()
+
+![rgb-image-space]()
+
+### Support Vector Machine Model
+
+## Sliding Window Search
+
+
+## Video Implementation
+
+
+## Discussion
+
+
+
 
 **Vehicle Detection Project**
 
@@ -23,30 +71,10 @@ The goals / steps of this project are the following:
 
 * Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
 * Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
-* Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
 * Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
 * Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
 * Estimate a bounding box for vehicles detected.
 
-[//]: # (Image References)
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
-
-## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
----
-###Writeup / README
-
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Vehicle-Detection/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
-
-You're reading it!
 
 ###Histogram of Oriented Gradients (HOG)
 
