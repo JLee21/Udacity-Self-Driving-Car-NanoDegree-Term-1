@@ -3,8 +3,6 @@
 
 Overview
 ---
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/video-gif.gif)
-
 The goal of this project is to detect and track vehicles on a road using a combination of machine learning and computer vision techniques.
 
 Project Outline
