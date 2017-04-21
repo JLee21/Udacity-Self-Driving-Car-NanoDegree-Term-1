@@ -1,3 +1,19 @@
+## Project: Vehicle Detection
+[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
+
+Overview
+---
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/video-gif.gif)
+
+The goal of this project is to detect and track vehicles on a road using a combination of machine learning and computer vision techniques.
+
+Project Outline
+---
+* Files Submitted 
+
+
+
+
 ##Writeup Template
 ###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
 
