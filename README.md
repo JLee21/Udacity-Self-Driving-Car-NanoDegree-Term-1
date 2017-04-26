@@ -6,7 +6,7 @@
 
 ## Who
 
-## Quick Facts
+## Quick Time Stats for Term 1
 
 [Link to full time report (PDF)](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/docs/full-summary-document.pdf)
 
