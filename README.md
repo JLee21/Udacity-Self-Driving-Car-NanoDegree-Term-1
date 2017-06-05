@@ -7,7 +7,7 @@ Here are their outlines:
 * [Term 2 - Sensor Fusion, Localization, Controls](https://medium.com/udacity/term-2-in-depth-on-udacitys-self-driving-car-curriculum-775130aae502)
 * TBD
 ## Why
-To be completed
+[Intel predicts a $7 trillion self-driving future](https://www.theverge.com/2017/6/1/15725516/intel-7-trillion-dollar-self-driving-autonomous-cars)
 ## Who
 To be completed
 ## Quick Time Stats for Term 1
