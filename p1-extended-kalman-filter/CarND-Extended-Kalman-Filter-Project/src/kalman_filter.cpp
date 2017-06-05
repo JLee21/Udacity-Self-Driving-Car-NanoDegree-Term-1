@@ -1,5 +1,4 @@
 #include "kalman_filter.h"
-//#include <math.h>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -21,31 +20,19 @@ void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
 }
 
 void KalmanFilter::Predict() {
-  /**
-  TODO:
-    * predict the state
-  */
+
+  //predict calculations
   x_ = F_ * x_;
   MatrixXd Ft = F_.transpose();
   P_ = F_ * P_ * Ft + Q_;
-//  std::cout << "\nPrediction\n" << x_ << std::endl;
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Kalman Filter equations
-  */
-  std::cout << "\nInside Laser Update()";
-//  std::cout << "Raw measurments = \n" << z;
 
   //update calculations
   VectorXd z_pred = H_ * x_;
-//  std::cout << "\nz_pred = \n" << z_pred << std::endl;
   VectorXd y = z - z_pred;
   MatrixXd Ht = H_.transpose();
-//  std::cout << "\nHt\n" << Ht;
-//  std::cout << "\nR_\n" << R_;
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
   MatrixXd PHt = P_ * Ht;
@@ -56,19 +43,9 @@ void KalmanFilter::Update(const VectorXd &z) {
   long x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
-
-//  std::cout << "y = " << y << std::endl;
-//  std::cout << "updated x_ = \n" << x_;
-
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
-  /**
-  TODO:
-    * update the state by using Extended Kalman Filter equations
-  */
-//  std::cout << "\nInside Radar Update\n";
-//  std::cout << "Raw measurments = \n" << z;
 
   //update calculations
   //recover state parameters
@@ -80,46 +57,30 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   if(fabs(px) < 0.0001){
     px = 0.0001;
   }
-  //map the predicted state to polar coord.
-  // NOTE!
-  // You'll need to make sure to normalize phi in the y vector
-  // so that its angle is between -pi and pi;
-  // in other words, add or subtract 2pi from phi until it is between -pi and pi.
   float phi = atan2(py, px);
   std::cout << "\nx   \t" << px << std::endl;
   std::cout << "y   \t" << py << std::endl;
   std::cout << "phi\t" << phi << std::endl;
-//  if (px < 0 && py < 0){
-//    std::cout << "\nPhi is greater than PI\n";
-//    phi -= 6.28;
-//  }
-//  if (phi < -3.14){
-//    std::cout << "\nGreater than PI\n";
-//    phi += 2*3.14;
-//  }
   std::cout << "\nchange2\n";
 
-  // add polar coords.
+  // convert cartesian coords. to polar and add to z_pred.
   Eigen::VectorXd z_pred = VectorXd(3);
   z_pred << sqrt(pow(px,2)+pow(py,2)),
             phi,
             (px*vx + py*vy)/sqrt(pow(px,2)+pow(py,2));
-
-//  VectorXd z_pred =  H_*x_;
-//  std::cout << "\nz_pred = \n" << z_pred << std::endl;
   VectorXd y = z - z_pred;
-  if (y(1) > 3.14){
-    std::cout << "\nPhi is greater than PI\n";
-    y(1) = y(1) - 6.28;
+  // NOTE!
+  // We need to make sure to "normalize" phi in the y vector (which is `y(1)`)
+  // so that its angle is between -pi and pi;
+  // in other words, add or subtract 2pi from phi until it is between -pi and pi.
+  if (y(1) > PI){
+    y(1) -= 2*PI;
   }
-  if (y(1) < -3.14){
-    std::cout << "\nGreater than PI\n";
-    y(1) = y(1) + 2*3.14;
+  if (y(1) < -PI){
+    y(1) += 2*PI;
   }
-  std::cout << "y_phi\t" << y(1);
+  //continue on with Meas. Update
   MatrixXd Ht = H_.transpose();
-//  std::cout << "\nHt\n" << Ht;
-//  std::cout << "\nR_\n" << R_;
   MatrixXd S = H_ * P_ * Ht + R_;
   MatrixXd Si = S.inverse();
   MatrixXd PHt = P_ * Ht;
@@ -130,8 +91,5 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   long x_size = x_.size();
   MatrixXd I = MatrixXd::Identity(x_size, x_size);
   P_ = (I - K * H_) * P_;
-
-//  std::cout << "y = " << y << std::endl;
-//  std::cout << "updated x_ = \n" << x_;
 
 }
