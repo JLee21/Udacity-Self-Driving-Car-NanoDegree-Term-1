@@ -2,6 +2,14 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## How To Run Code
+(On Windows)
+```batch
+cd CarND-Extended-Kalman-Filter-Project\build
+ExtendedKF.exe ..\data\obj_pose-laser-radar-synthetic-input.txt ..\data\output.txt
+```
+
+---
 
 ## Dependencies
 
