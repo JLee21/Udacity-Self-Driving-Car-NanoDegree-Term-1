@@ -15,8 +15,6 @@ using std::vector;
 
 void check_arguments(int argc, char* argv[]) {
 
-  string foo = "yes";
-
   string usage_instructions = "Usage instructions: ";
   usage_instructions += argv[0];
   usage_instructions += " data/obj_pose-laser-radar-synthetic-input.txt output/output.txt";
@@ -56,10 +54,13 @@ int main(int argc, char* argv[]) {
 
   //check_arguments(argc, argv);
 
-  //string in_file_name_ = argv[1];
-  string in_file_name_ = "../data/obj_pose-laser-radar-synthetic-input.txt";
+  string in_file_name_ = argv[1];
+
+  // below are file name variables for testing purposes
+  //string in_file_name_ = "../data/obj_pose-laser-radar-synthetic-input.txt";
   //string in_file_name_ = "../data/obj_pose-laser-radar-synthetic-input-RADAR-FIRST.txt";
-  cout << "In file = " << in_file_name_ << endl;
+  //cout << "In file = " << in_file_name_ << endl;
+
   ifstream in_file_(in_file_name_.c_str(), ifstream::in);
 
   //string out_file_name_ = argv[2];

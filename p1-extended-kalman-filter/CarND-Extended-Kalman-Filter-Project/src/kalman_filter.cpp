@@ -58,11 +58,6 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     px = 0.0001;
   }
   float phi = atan2(py, px);
-  std::cout << "\nx   \t" << px << std::endl;
-  std::cout << "y   \t" << py << std::endl;
-  std::cout << "phi\t" << phi << std::endl;
-  std::cout << "\nchange2\n";
-
   // convert cartesian coords. to polar and add to z_pred.
   Eigen::VectorXd z_pred = VectorXd(3);
   z_pred << sqrt(pow(px,2)+pow(py,2)),
