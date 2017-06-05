@@ -2,7 +2,7 @@
 
 ## What
 For this Udacity NanoDegree, there are three terms.
-Term Outlines:
+Here are their outline:
 * [Term 1 - Deep Learning, Computer Vision](https://medium.com/self-driving-cars/term-1-in-depth-on-udacitys-self-driving-car-curriculum-ffcf46af0c08)
 * [Term 2 - Sensor Fusion, Localization, Controls](https://medium.com/udacity/term-2-in-depth-on-udacitys-self-driving-car-curriculum-775130aae502)
 * TBD
