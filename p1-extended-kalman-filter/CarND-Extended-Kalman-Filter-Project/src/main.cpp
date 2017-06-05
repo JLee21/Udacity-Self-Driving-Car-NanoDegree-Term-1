@@ -52,8 +52,7 @@ void check_files(ifstream& in_file, string& in_name,
 
 int main(int argc, char* argv[]) {
 
-  //check_arguments(argc, argv);
-
+  check_arguments(argc, argv);
   string in_file_name_ = argv[1];
 
   // below are file name variables for testing purposes
