@@ -15,6 +15,8 @@ cd CarND-Extended-Kalman-Filter-Project\build
 cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../src/
 make
 ```
+## Final Kalman Filter Estimage
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p1-extended-kalman-filter/CarND-Extended-Kalman-Filter-Project/img/EKF-chart.JPG)
 ---
 
 ## Dependencies
