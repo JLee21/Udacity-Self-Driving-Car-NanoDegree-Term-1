@@ -8,7 +8,13 @@ Self-Driving Car Engineer Nanodegree Program
 cd CarND-Extended-Kalman-Filter-Project\build
 ExtendedKF.exe ..\data\obj_pose-laser-radar-synthetic-input.txt ..\data\output.txt
 ```
-
+## How to Build Code
+(On Windows)
+```batch
+cd CarND-Extended-Kalman-Filter-Project\build
+cmake -G"Eclipse CDT4 - Unix Makefiles" -D CMAKE_BUILD_TYPE=Debug ../src/
+make
+```
 ---
 
 ## Dependencies
