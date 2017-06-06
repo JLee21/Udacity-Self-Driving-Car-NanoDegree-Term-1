@@ -31,7 +31,6 @@ FusionEKF::FusionEKF() {
               0, 0.0009, 0,
               0, 0, 0.09;
 
-
   //Finish initializing the FusionEKF.
   //Set the process and measurement noises
   //Similar to Lesson 5: Part 13 in 'Tracking.cpp'
@@ -64,7 +63,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
                0, 1, 0, 0,
                0, 0, 1000, 0,
                0, 0, 0, 1000;
-    //measurement matrix
+    // laser measurement matrix
     H_laser_ = MatrixXd(2, 4);
     H_laser_ << 1, 0, 0, 0,
                 0, 1, 0, 0;
@@ -105,7 +104,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   // Update the process noise covariance matrix.
   // Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
 
-
   //compute the time elapsed between the current and previous measurements
   //dt - expressed in seconds
   float dt = (measurement_pack.timestamp_ - previous_timestamp_) / 1000000.0;
@@ -126,7 +124,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
               dt_3/2*noise_ax, 0, dt_2*noise_ax, 0,
               0, dt_3/2*noise_ay, 0, dt_2*noise_ay;
 
-
   // Predict() will return a predicted State Vector and the corrsp. Covariance Matrix
   ekf_.Predict();
 
@@ -140,29 +137,18 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // Calculate Jacobian Matrix
     // Hj_ is a matrix of coeffiencints. These coeffs represent the
     // derivative coeffs need for the First Order Taylor Series Approx.
-    Tools jacob;
-    Hj_ = jacob.CalculateJacobian(ekf_.x_);
-
-    //pass vectors and matrices within KalmanFiler scope
-    ekf_.Init(ekf_.x_,
-              ekf_.P_,
-              ekf_.F_,
-              Hj_,
-              R_radar_,
-              ekf_.Q_);
+    // Also, assign the appropriate H_ and R_ matrices
+    ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
+    ekf_.R_ = R_radar_;
 
     // perform radar measurement update
     ekf_.UpdateEKF(measurement_pack.raw_measurements_);
 
   } else {
 
-    //pass vectors and matrices within KalmanFiler scope
-    ekf_.Init(ekf_.x_,
-              ekf_.P_,
-              ekf_.F_,
-              H_laser_,
-              R_laser_,
-              ekf_.Q_);
+    // assign the appropriate H_ and R_ matrices
+    ekf_.H_ = H_laser_;
+    ekf_.R_ = R_laser_;
 
     // perform laser measurement update
     ekf_.Update(measurement_pack.raw_measurements_);

@@ -52,18 +52,17 @@ void check_files(ifstream& in_file, string& in_name,
 
 int main(int argc, char* argv[]) {
 
+    /*below are file name variables for testing purposes*/
+//  string in_file_name_ = "../data/obj_pose-laser-radar-synthetic-input.txt";
+//  string out_file_name_ = "../data/output.txt";
+//  cout << "In file = " << in_file_name_ << endl;
+
   check_arguments(argc, argv);
-
   string in_file_name_ = argv[1];
-  ifstream in_file_(in_file_name_.c_str(), ifstream::in);
-
   string out_file_name_ = argv[2];
-  ofstream out_file_(out_file_name_.c_str(), ofstream::out);
 
-  // below are file name variables for testing purposes
-  //string in_file_name_ = "../data/obj_pose-laser-radar-synthetic-input.txt";
-  //string out_file_name_ = "../data/output.txt";
-  //cout << "In file = " << in_file_name_ << endl;
+  ifstream in_file_(in_file_name_.c_str(), ifstream::in);
+  ofstream out_file_(out_file_name_.c_str(), ofstream::out);
 
   check_files(in_file_, in_file_name_, out_file_, out_file_name_);
 

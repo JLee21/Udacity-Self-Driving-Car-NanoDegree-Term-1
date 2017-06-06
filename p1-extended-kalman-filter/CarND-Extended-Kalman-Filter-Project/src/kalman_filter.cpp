@@ -29,7 +29,7 @@ void KalmanFilter::Predict() {
 
 void KalmanFilter::Update(const VectorXd &z) {
 
-  //update calculations
+  //update calcuations
   VectorXd z_pred = H_ * x_;
   VectorXd y = z - z_pred;
   MatrixXd Ht = H_.transpose();
@@ -68,12 +68,8 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   // We need to make sure to "normalize" phi in the y vector (which is `y(1)`)
   // so that its angle is between -pi and pi;
   // in other words, add or subtract 2pi from phi until it is between -pi and pi.
-  if (y(1) > PI){
-    y(1) -= 2*PI;
-  }
-  if (y(1) < -PI){
-    y(1) += 2*PI;
-  }
+  y(1) = fmod(y(1), 2*PI);
+
   //continue on with Meas. Update
   MatrixXd Ht = H_.transpose();
   MatrixXd S = H_ * P_ * Ht + R_;
