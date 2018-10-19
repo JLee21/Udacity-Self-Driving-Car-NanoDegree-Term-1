@@ -3,7 +3,7 @@
 
 Overview
 ---
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/video-gif.gif)
+![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree-Term-1/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/video-gif.gif)
 
 The goal of this project is to classify the drivable area of a car's lane and to calculate the estimated lane's radius of curvature and the vehicle's lateral offset from the lane's center.
 
