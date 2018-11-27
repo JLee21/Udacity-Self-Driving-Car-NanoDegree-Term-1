@@ -3,7 +3,7 @@
 
 Overview
 ---
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/video.gif)
+![](./write-up/video.gif)
 
 **The purpose of this project is to clone human driving behavior by implementing a Deep Convolutional Neural Network**
 
@@ -40,37 +40,37 @@ The model.py file contains the code for training and saving the convolution neur
 ## Data Collection  
 The car records what it sees with a virtual camera at the front of the vehicle. This is the input of the model. The steering angle is also recorded and is linked to that camera image. The steering angle is the output or target for the model; the closer the model can predict the correct steering angle for a corresponding image the better the model performs, generally.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
+![](./write-up/original-image.JPG)
 
 The charts below show the distribution of all the data collected. Note that no image processing/augmentation has taken place.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steering-angle-distribution.PNG)
+![](./write-up/steering-angle-distribution.PNG)
 
 I recruited a friend to drive the car around the track as close to perfection as possible. One clockwise and one counterclockwise. He also included extreme turn corrections because the car needed to learn how to recover in case it deviates far from the center of the road.
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/extreme-turns.JPG)
+![](./write-up/extreme-turns.JPG)
 
 To avoid the car from being biased toward turning left or right, additional image/steering angle data was added by using OpenCV's flip method. The steering angle also had to be flipped as well
 ```python
 cv2.flip(img, 1)
 angle * -1.0
 ```
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/image-flip.JPG)
+![](./write-up/image-flip.JPG)
 
 To further train the car to return to the center of the lane, I took advantage of the left and right cameras on the car. Essentially, I treated the car's left camera as its center-facing camera and changed the steering angle by an offset. That way, if the car center camera sees a picture similar to its left camera image, it will be trained to return to the lane's center.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/steer-offsets.JPG)
+![](./write-up/steer-offsets.JPG)
 
 For each image that goes into training the model enters an image pipeline (located in the notebook's cell block `Create Generator Helper Functions`
 
 Before image preprocessing, each image starts off as a Red, Green, and Blue channel image (160x320x3)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/original-image.JPG)
+![](./write-up/original-image.JPG)
 
 The image is then converted to a Hue Saturation Value (HSV) image and the Saturation channel is extracted. Exctracting just the S-channel helped the car detect the boundaries as it allows the edges of the road to standout while the road itself appears as a mostly flat color.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/hsv-image.JPG)
+![](./write-up/hsv-image.JPG)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/only-saturation-image.JPG)
+![](./write-up/only-saturation-image.JPG)
 
 By now, the shape of the image is (160x320x1), where there is only one channel and not three (3 -> 1). The model simply does not need those original spatial dimensions (160x320) even though they help us humans see what the car sees. A image size of 64x64 works well for training as this retains enough data to train (not to mention the huge amount of training time saved!). In addition to resizing the image, the model doesn't need to be trained on the sky (top of the image) nor the hood of the car (bottom of the image) those parts are cropped.
 ```python
@@ -79,8 +79,8 @@ cv2.resize(img, (rows, cols), cv2.INTER_AREA)
 
 # cropping is performed within a Keras layer Cropping2D as mentioned later
 ```
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/resized-imgae.PNG)
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/cropped-final-image.png)
+![](./write-up/resized-imgae.PNG)
+![](./write-up/cropped-final-image.png)
 
 Train and Validate Split
 ---
@@ -99,7 +99,7 @@ The generator was created in the cell block `Create Generator` and the generator
  model.fit_generator(generator=train_generator ... validation_data=validation_generator)
 ```
 During training, the model is trained on one small batch of images at a time. Here's the distribution of steering angles of five randomly chosen batches.
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/batch-distribution.png)
+![](./write-up/batch-distribution.png)
 Unlike the original, unprocessed distribution of steering angles as shown earlier in **Data Collection**, the distribution of each batch resembles a normal Gaussian distribution. This is important as this enables the car to be robust in accepting multiple images with different corresponding steering angles. In other words, we want the car to drive straight in the middle of the road -- most of the time -- but we also want the car to know what to do during sharp turns, gradual turns, center-of-the-lane deviations, etc.
 
 ## Build a Deep Neural Network
@@ -152,11 +152,11 @@ Convolution / MaxPool
 I implemented a similar architecture to NVidia's [end-to-end model](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). Similar to other student's architecture, [here]() and [here]() as well as NVidia's, a common tactic is to extract more and more feature layers with each subsequent convolutional layer. The reasoning is that each convolution layer extracts higher and higher levels of abstractions from the previous convolution layer. 
 This is why I chose the depth of each of my convolution layers to be 32, 64, and 128. Below is a peek of the model's feature maps for each convolution layer for a single test image. The first convolution layer contains 32 feature maps. Areas with more white resemble high-activations areas - parts of the neural network that become 'excited' and propagate deeper into the network.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-1.png)
+![](./write-up/conv-layer-1.png)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-2.png)
+![](./write-up/conv-layer-2.png)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/conv-layer-3.png)
+![](./write-up/conv-layer-3.png)
 
 Fully Connected Layers
 ---
@@ -178,9 +178,9 @@ model.compile(loss='mse', optimizer='adam')
 ```
 For the model's loss calculation, the driving challenge is similar to solving a classic regression problem:
 
-![http://pgfplots.net/tikz/examples/regression-residuals/](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/regression-example.JPG)
+![http://pgfplots.net/tikz/examples/regression-residuals/](./write-up/regression-example.JPG)
 
-[*image source](http://pgfplots.net/tikz/examples/regression-residuals/)
+[*image source](./examples/regression-residuals/)
 
 The model's loss is calculated using Mean Squared Error (MSE) loss. This was chosen as the model tries to *fit* not *classify* a target steering angle to its input image. 
 
@@ -190,7 +190,7 @@ Training Strategy
 ---
 I implemented a piece of advice from my previous project review in that the model's training is conditional on its calculated loss improvement; it stops training when the error loss stops decreasing. I averaged the last three validation loss and compared that value with the current validation loss -- if the model's current validation loss is less than the average loss continue training. In addition, the model is saved after each epoch, that is, only if the validation loss improves. This strategy is implemented cell block `Train, Validate, and Save Model`
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p3-behavioural-cloning/carnd-behavioral-cloning-p3/write-up/model-mean-squared-error-loss.png)
+![](./write-up/model-mean-squared-error-loss.png)
 
 I found the absolute value of the training or validation MSE loss was not an explicit indicator that the car would drive successfully.
 
