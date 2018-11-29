@@ -30,7 +30,7 @@ ret, corners = cv2.findChessboardCorners(gray, (9,6), None)
 ```
 The returned `corners` vertices are compared to a plane mesh grid of points that are evenly spaced on a flat plane (shown as `Mesh Grid of objpoints` below). 
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/objpoints-draw-corners.JPG)
+![](./write-up-images/objpoints-draw-corners.JPG)
 
 The OpenCV function `calibrateCamera` computes the collected `objpoints` and `imgpoints` or `corners` and outputs a corrected camera matrix `mtx` and distortion coefficients `dist`.
 ```python
@@ -39,7 +39,7 @@ ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, img_siz
 ```
 Below is an example of a distortion corrected calibration image.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/cam-cal-undistort.JPG)
+![](./write-up-images/cam-cal-undistort.JPG)
 
 
 ## Image Pipeline
@@ -51,7 +51,7 @@ cv2.undistort(img, mtx, dist, None, mtx)
 ```
 Below is an example of a distortion corrected image that is part of the driving video.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/undistort-road-image.JPG)
+![](./write-up-images/undistort-road-image.JPG)
 
 ### Color Transforms/Gradients
 One of the more challenging aspects of this project was selecting the image's color channel thresholds in order to find the pixels in the image that represent the lane lines. Below I discuss my technique for finding these lane line pixels and I have divided the approach into the topics: `Hue Lightness Saturation Channels` and `Red Green Blue Channels`. I found that HLS and RGB segmentation are complimentary, since HLS shows lane lines when RGB falls short, and vice versa.
@@ -59,18 +59,18 @@ One of the more challenging aspects of this project was selecting the image's co
 #### Hue Lightness Saturation Channels
 I converted each image to an HLS image and then cycled through various thresholds of each channel's pixel value. I selected the L-channel pixel threshold to be `220-255` and the S-channel pixel threshold to be `200-255`. The H-channel appeared unuseful in finding the lane lines.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/hsl-thresh.JPG)
+![](./write-up-images/hsl-thresh.JPG)
 
 I then applied a Sobel gradient to the S-channel, along with adding the L-channel pixels to make the `Combined Binary` mask shown below
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/hsv-combined-binary.JPG)
+![](./write-up-images/hsv-combined-binary.JPG)
 
 The usage of the S and L channel binary mask can be found in cell block `Image Pipeline` lines `5-16` and `28-33`
 
 #### Red Green Blue Channels
 I performed the same cycling of pixel thresholds for the RGB channels as I did for HLS. I selected the R-channel pixel threshold to be `245-255`, the G-channel pixel threshold to be `215-255`, and the B-channel pixel threshold to be `215-255`.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/rgb-thresh.JPG)
+![](./write-up-images/rgb-thresh.JPG)
 
 The usage of the RGB binary mask can be found in cell block `Image Pipeline` lines `17-24` and `30-32`.
 
@@ -85,7 +85,7 @@ cv2.warpPerspective(img, M, img_size, flags=cv2.INTER_LINEAR)
 ```
 The second and fourth column in the image grid below show the output of applying a perspective transform.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/perspectives.JPG)
+![](./write-up-images/perspectives.JPG)
 
 The function that is responsible for performing this perspective transform on all images is located in cell block `Image Pipeline Functions`, lines `86-92`.
 
@@ -99,16 +99,16 @@ np.polyfit(righty, rightx, 2)
 ```
 Below are a few examples where the left and right lane line pixels are colored red and blue, respectively. The yellow lines are the second-order polynomial fit. When fitting the polynomial function, only the respective lane-colored pixels are used.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/lane-line-fit-1.JPG)
+![](./write-up-images/lane-line-fit-1.JPG)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/lane-line-fit-2.JPG)
+![](./write-up-images/lane-line-fit-2.JPG)
 
 The code for the Sliding Window search can be found in cell block `Draw Lane and Stats Function`, lines `7-136`.
 
 ### Radius of Curvature
 Now that the a second order polynomial line has been fit to both the left and right lane lines, the lane's radius of curvature can be found using the following equation.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/radius-of-curvature.JPG)
+![](./write-up-images/radius-of-curvature.JPG)
 
 [*image source](http://www.intmath.com/applications-differentiation/8-radius-curvature.php)
 
@@ -129,9 +129,9 @@ The code that calculates the vehicle's center offset is located in cell block `D
 ### Final Plot of Lane Space and Statistics
 Below are two examples where a projected lane polygon represents the drivable portion of the car's lane as well as the lane's estimated radius of curvature and the vehicle's lateral offset from the lane's center.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/final-output-1.JPG)
+![](./write-up-images/final-output-1.JPG)
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/final-output-2.JPG)
+![](./write-up-images/final-output-2.JPG)
 
 ## Video Pipeline
 The final video submission, `video.mp4`, was created using a python module `MoviePy`. The code below (cell block `Full Test Clip - Used for Project Submission`) takes the function `apply_lane_find` (cell block `Full Image Pipeline`) and applies it to each of the video's image frames.
@@ -145,7 +145,7 @@ proj_clip = clip1.fl_image(apply_lane_find)
 ### Catastrophic Failure
 Although executing the image pipeline on a handful of test images to find the lane line pixels can be helpful, I still found a few frames in the video where the drawn lane had a catastrophic failure. In particular, the shadows cast by the road's adjacent tree created extra noise in such a fashion that the sliding window search followed the bright splotches of sunlight instead of the lane line as shown below.
 
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p4-advanced-lane-finding/carnd-advanced-lane-lines/write-up-images/catistrophic-failure-2.JPG)
+![](./write-up-images/catistrophic-failure-2.JPG)
 
 The blue color on the road represents what the algorithm thought was the right lane line. After discovering this, I proceeded to cycle through the HLS and RGB channel values in order to better filter false positives.
 
