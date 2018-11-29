@@ -3,7 +3,7 @@
 
 Overview
 ---
-![LeNet5 model](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/lenet-model-5.jpg)
+![LeNet5 model](./write-up/lenet-model-5.jpg)
 
 The goal is of this project is to construct a Convolutional Neural Network to classify German Traffic signs.
 
@@ -28,7 +28,7 @@ Number of classes = 43
 ### Data Set Visualization
 Here is a histogram of all of the images that the model will be trained on. Looking at this is important because having a skewed or disproportionate data set will most likely skew the model into biased predictions.
 
-![sign distribution](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/sign-disto.png)
+![sign distribution](./write-up/sign-disto.png)
 
 I randomly chose a handful of images and their corresponding sign label from the test set. Some reasons for doing this:
 
@@ -37,7 +37,7 @@ I randomly chose a handful of images and their corresponding sign label from the
 * Spot any outliers or unmatched signs
 * Notice any features that you can take advantage of (color, shape, symbol complexity, etc.)
 
-![visualize randomly chosen images and their sign lables](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/visualize-data-set.JPG?raw=true)
+![visualize randomly chosen images and their sign lables](./write-up/visualize-data-set.JPG?raw=true)
 
 Design and Test a Model Architecture
 ---
@@ -93,7 +93,7 @@ Analyze Performance on novel German Traffic Signs
 ---
 I grabbed seven German traffic signs from Google's image search. By choosing signs with graffiti I can see how this may bend the perception of the model. I also chose a sign that had an auxiliary, rectangular sign below directly below it -- an additional trait the model was not trained on.
 
-![test images](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-images.JPG)
+![test images](./write-up/test-images.JPG)
 
 The model scored an overall accuracy of **71.43%** on these seven test images. Let's explore possible explanations as to why this score is much lower than the corpus' test set of **92.28%**
 
@@ -101,23 +101,23 @@ The model scored an overall accuracy of **71.43%** on these seven test images. L
 
 * The sign **Beware of Ice/Snow** contains a relatively complex snowflake symbol. The network's top three prediction include the shape and outline of the sign, but the model failed to determine what exactly was in the sign's center. The shape is too intricate; this might be evidence that the network architecture is not robust enough to handle complex symbols.
 
-![Beware of Ice/Snow](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-1.JPG)
+![Beware of Ice/Snow](./write-up/test-1.JPG)
 
 * As noted previously, I included a traffic sign that the model did indeed train on, however, as is common with traffic signs, there is an additional, smaller rectangular sign directly below it. It appears the model mistook this small, white rectangular shape to mean **No Entry** rather than the correct **Wild Animals Crossing**.
 
-![Wild Animals Crossing](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-3.JPG)
+![Wild Animals Crossing](./write-up/test-3.JPG)
 
 * The model appears acute enough to detect large and small vehicle shapes within each sign. This is evident with the **No Passing for Vehicles over 3.5 Metric Tons**. The model even follows our own intuition with its next best guesses as **End of No Passing by Vehicles over 3.5 Metric Tons** and **No Passing**.
 
-![No Passing for Vehicles over 3.4 Metric Tons](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-image-6.JPG)
+![No Passing for Vehicles over 3.4 Metric Tons](./write-up/test-image-6.JPG)
 
 * Even when an image is taken from an angle, like with **No Passing**, the model picks out the round shape, the white background, and the two car shapes. Interestingly enough, the model is slightly reluctant in its decision as it gives some possibility that the sign is **End of No Passing**.
 
-![No Passing](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-4.JPG)
+![No Passing](./write-up/test-4.JPG)
 
 * The model appears to ignore defaced traffic signs and treats extra markings as noise.
 
-![Graffitti](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/test-5.JPG)
+![Graffitti](./write-up/test-5.JPG)
 
 Below are the rest of the model's predictions. The layout goes like this:
 
@@ -138,4 +138,4 @@ Note the bottom two rows. Of these rows, the first sign -- with the pedestrians 
 
 The last image is a picture of myself. Haven't you ever wondered what German traffic sign you are?
 
-![all test images](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p2-traffic-signs/traffic-sign-classifier-project/write-up/all-tests.png)
+![all test images](./write-up/all-tests.png)
