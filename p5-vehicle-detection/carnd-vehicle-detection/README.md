@@ -3,7 +3,7 @@
  
 Overview
 ---
-![gif](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/gif.gif)
+![gif](./output-images/gif.gif)
  
 The goal of this project is to detect and track vehicles on a road using a combination of machine learning and computer vision techniques.
  
@@ -26,11 +26,11 @@ This section explores what features were selected and why as well as what machin
 ### Feature Vector Selection
 By taking a look at sample test image, we can easily pick out the two cars, however, the algorithm only 'sees' pixel values.
  
-![test-image](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/test-image.JPG)
+![test-image](./output-images/test-image.JPG)
  
 In order to help distinguish a group of pixel values that represent a car versus those that denotes a tree, for example, the image space has been separated into YCrCb values, shown below.
  
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/ycrcb-image-space.JPG)
+![](./output-images/ycrcb-image-space.JPG)
  
 I chose the YCrCb image space since this space proved best among other image spaces when testing. From the graph above, the model takes advantage of the spread of values in the `Y` or luminance channel as well as the tight luminance groupings; the black car's luminance values are grouped low on the `Y` axes while the white car's values are grouped higher. Additionally, the roadside vegetation green colors and the yellow lane lines, for example, are respectively grouped together.
 I took the YCrCb channel values and calculated the Histogram of Orientated Gradients (HOG) for each channel. The purpose of this comes from the utility of HOG in determining an object within an image. HOG groups pixels into cells `pix_per_cell` and then each cell into blocks `cell_per_block`. The gradient of the given pixel values are calculated within each cell and the gradient is grouped into `orient` number of bins when taking the histogram. The values are then normalized according to the `cell_per_block` size.
@@ -44,15 +44,15 @@ HOG Parameter | Value
  
 The image grid below shows the contrasts of a car and non-car image that have both underwent a HOG operation. The values I chose for the HOG function reliably highlight the signatures of a car such as where the hood of the car begins or the stark contrast between the ground and the bottom of the car. When compared to the HOG output of a non-car image, it is clear that the HOG parameters are able to grasp the overall shape of the car and even the stark change in gradient from the car's taillight or license plate. A non-car HOG output may show edges, however, it does not contain or exhibit the overall rectangular shape of the car.
  
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/hog-explore.JPG)
+![](./output-images/hog-explore.JPG)
  
 The code for implementing HOG is shown in cell block `Functions`, lines `1-19`.
  
 In addition to collecting HOG values as part of the feature vector, the RGB pixel values of an image are added in two ways: by collecting the pixel values of an image as well as the histogram of each RGB channel and concatenating both unraveled vectors to the feature vector. When looking at the RGB color space for a given test image, the color of the cars tend to be vibrant colors when contrasted with the surrounding road, scenery, etc.
  
-![test-image](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/test-image.JPG)
+![test-image](./output-images/test-image.JPG)
  
-![rgb-image-space](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/rgb-image-space.JPG)
+![rgb-image-space](./output-images/rgb-image-space.JPG)
  
 Collecting the RGB pixel values is implementing in cell block `Functions`, lines `21-26` and the RGB histogram values are shown in lines `28-38`.
  
@@ -61,13 +61,13 @@ As mentioned in the section directly before, a feature vector is collected from 
  
 The training data was a collection of car and non-car images, about one thousand for each.
  
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/car-not-car.JPG)
+![](./output-images/car-not-car.JPG)
  
 The feature vector is extracted from each of the training/test images and Sklearn’s Standard Scaler was applied. In order to efficiently train the SVM model, this scaler object alters the columns of each feature vector so that the column-wise mean is zero with a unit variance. The code for scaling the training/test images is in cell block `Create Model`, lines `31-34`.
  
 Given that SVM models have numerous hyperparameters to select, the Python library Sklearn's GridSearchCV was used to test out the following combination of parameters.
  
-![svm-params](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/svm-params.JPG)
+![svm-params](./output-images/svm-params.JPG)
  
 The best parameters in regards to the best test score and training time follows:
  
@@ -81,11 +81,11 @@ gamma | `0.0001`
 ## Sliding Window Search
 In order to determine if a vehicle is present in an image, a Sliding Window Search technique was used. Rather than searching the entire image at once for the presence of a vehicle a small, fixed-sized window slides across the image extracting the pixel values. Furthermore, three different window scales were used and each window scale only searched parts of the image, as shown below:
  
-![window scale](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/search-sections.JPG)
+![window scale](./output-images/search-sections.JPG)
  
 The image below helps illustrate a window sliding across a subsection of the original image where each grid color represents a different window scale and corresponding image subsection.
  
-![example grid search](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/subsample-grid-search.JPG)
+![example grid search](./output-images/subsample-grid-search.JPG)
  
 The scaling of the window was selected based on various testing. I found that small window scales (less than 0.7) produced spurious false positives while large window scales (more than 1.2) appeared to overwhelm the overall vehicle detection space by creating large overlaps into non-vehicle space.
  
@@ -95,7 +95,7 @@ An important parameter selection was how much the window slides across the image
  
 Once the feature vector is extracted, the SVM model tests if there is a vehicle. If the model predicts a vehicle, that window space is added to a heatmap and an accumulation of positive vehicle detections begins to form as shown below:
  
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/heatmap.JPG)
+![](./output-images/heatmap.JPG)
  
 The code for calling multiple feature vector extractions with various windows sized can be found in code block `Heatmaps` in the function `heatmap`. The feature vector extraction takes place in code block `HOG/Pixel Subsamplilng Function` in the function `find_cars`.
  
@@ -104,24 +104,24 @@ In order to filter out false positive vehicle detections, a threshold was applie
  
 I noticed a *Bermuda Triangle* of loss vehicle detections at a medium range distance within the driving footage. As a vehicle would pass about 30-50m ahead, its detection would slowly fade away. I implemented a more spatially narrow, small-scaled window search in this area as shown as a red grid below:
  
-![subsample grid space](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/subsample-grid-search.JPG)
+![subsample grid space](./output-images/subsample-grid-search.JPG)
  
 ## Video Implementation
 A vehicle tracking class `VehicleTracker` was created to organize all the functions needed in the processing pipeline. The class is created in cell block `Create Vehicle Tracker Class`. At a basic level, a single class is created to handle each image frame that is supplied from a driving video. The image is passed through processing functions that extract any and all feature vectors from the image and applies the findings to a heatmap. As heatmaps are collected from each image, an average over the last 20 stored heatmaps is created. This not only produced smoother heatmap drawings and less jittery bounding boxes, but it also helped ignore single vehicle detections by relying on a concentration of detections. I chose to store the last 20 heatmaps because this retained enough historic detections from surrounding vehicles so as to not miss (low frame count) or lag fast moving vehicles (high frame count). I implemented this filtering within the VehicleTracker class (cell block `Create Vehicle Tracker Class`, lines `15-19`.
  
-![avg heatmaps](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/avg-heatmap.JPG)
+![avg heatmaps](./output-images/avg-heatmap.JPG)
  
 In order to group a concentration of vehicle detections into a single bounding box, SciPy's `label()` function was used as this helped determine the boundaries of a collection of pixels as shown below:
  
-![label-examle](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/labeled-heatmap.JPG)
+![label-examle](./output-images/labeled-heatmap.JPG)
  
 The code for heatmap labeling is located in cell block `Create Vehicle Tracker Class`, lines `26-27`.
  
 By taking the combination of an averaged, labeled heatmap a bounding box was drawn to fit the labeled heatmap sections and the heatmap window sections were overlaid to output the final vehicle detection images:
  
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/out-img-heat.JPG)
+![](./output-images/out-img-heat.JPG)
  
-![](https://github.com/JLee21/Udacity-Self-Driving-Car-NanoDegree/blob/master/p5-vehicle-detection/carnd-vehicle-detection/output-images/out-img-heat-2.JPG)
+![](./output-images/out-img-heat-2.JPG)
  
 A 50 second driving video was used to demonstrate the entirety of the vehicle detection project. The video is named `video.mp4`.
 
